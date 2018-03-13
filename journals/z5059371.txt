@@ -1,0 +1,12 @@
+Work Diary
+
+Egene Oletu (z5059371)
+
+
+Week 2:
+Formed group. I created the bitbucket project for the team. We chose to base
+our project on blockchain and started assigning roles for the proposal and the
+project as a whole. I was given the role of scrum master for the project.
+
+Started working on epic for the interface of the project and researching
+blockchain and distributed apps
