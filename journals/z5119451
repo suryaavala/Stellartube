@@ -1,0 +1,12 @@
+
+week3
+Meeting Topic: Identify the responsibility for each member
+Meeting Date: 20/03/2018
+Meeting Time: 17:00
+Recorder: Yunhe
+Present: Egene, Surya, Natesh, Yunhe.
+This meeting reaches agreement on the following issues:
+1. The structure of the decentralize application, which is the database and blockchian will exchange information through websit. Websit extract information from database and show them on these web pages. Then send users’ uni-address and the price of goods to the blockchain for transaction.
+1.Egene will focus on developing web pages of the decentralize application. Many fundamental function will be finished in the next one week, including login page and home page.
+2.Surya and Natesh will keep researching on blockchain and smart contract. And a simple demo need to be done before the next one week.
+3.Yunhe should develop a database for this project which have to support the information for digital currency transaction.
