@@ -29,3 +29,15 @@ Natesh Krishna Pai (3470584)
 -Using Mist Browser, accessed ethereum wallet and tried sending ether/transactions (In Progress)
 -Studied on on building our own hello world contracts (planning to use Remix IDE and solidity programming language) (Working on this in Next Sprint)
 
+Work Dairy (Week 5)
+Natesh Krishna Pai (3470584)
+-Built a private blockchain on local system
+-Attended all the sprint meetings
+-Successfully transferred ether between two parties using the ethereum wallet and private blockchain network
+-Learning solidity programming language
+-installed Ethereum CLI and Remix IDE
+-Exploring different options to try solidity (options such as npm, Docker)
+-creating a sample greeting contract with solidity
+-Deploying the greeting contract on ethereum blockchain
+
+
