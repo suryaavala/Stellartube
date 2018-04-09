@@ -1,0 +1,23 @@
+<html>
+    <head>
+        <title>Sign In</title>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    </head>
+    <body>
+        <div class="container">
+            <h1>Sign In</h1>
+            <div id="login-form">
+                <form action="" method="POST" name="signin">
+                    {{ form.hidden_tag() }}
+                    {{ form.username(id="username_input", placeholder="Email address") }}
+                    {{ form.password(id="password_input", placeholder="Password") }}
+                    {{ form.remember_me() }}
+                    <label for="remember_me">Remember me?</label>
+                    <a href="{{ url_for('index') }}">Forgot password?</a><br><br>
+                    {{ form.signin(id="submit", value="Sign In")}}
+                </form>
+            </div>
+            <p>New to Blockheads? <a href="{{ url_for('signin') }}">Create an account</a></p>
+        </div>
+    </body>
+</html>
