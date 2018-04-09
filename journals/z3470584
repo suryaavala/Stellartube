@@ -18,3 +18,26 @@ Natesh Krishna Pai (3470584)
 -Shared the completed proposal with the team for their feedback
 -Submitted the proposal on time after the headsup from the team
 
+Work Dairy (Week 4)
+Natesh Krishna Pai (3470584)
+
+-Took up the task of building and deploying a contract, sending ether between two parties and learn more on communication protocols.
+-Studied on Smart Contract and building on ethereum (Completed)
+-Attended the weekly 2nd meeting via google hangouts with Egene and Yunhe
+-Worked on Setting up the environment such as installing Geth, Mist Browser and so on (In progress)
+-Built a Private blockchain network with pre-writte sample code (In Progress)
+-Using Mist Browser, accessed ethereum wallet and tried sending ether/transactions (In Progress)
+-Studied on on building our own hello world contracts (planning to use Remix IDE and solidity programming language) (Working on this in Next Sprint)
+
+Work Dairy (Week 5)
+Natesh Krishna Pai (3470584)
+-Built a private blockchain on local system
+-Attended all the sprint meetings
+-Successfully transferred ether between two parties using the ethereum wallet and private blockchain network
+-Learning solidity programming language
+-installed Ethereum CLI and Remix IDE
+-Exploring different options to try solidity (options such as npm, Docker)
+-creating a sample greeting contract with solidity
+-Deploying the greeting contract on ethereum blockchain
+
+
