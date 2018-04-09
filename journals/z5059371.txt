@@ -29,3 +29,11 @@ to be made.
 Split up the interface epics I wrote for the proposal into user stories. Made
 wireframes for the homepage, login page, and create an acount page. Also ran
 the groups first daily stand up via google hangouts.
+
+Week 5:
+Setup website using flask. Started working on the login page and wrote a stub
+for the index page.
+
+Mid-sem Break:
+Added a bit of css to the login page and incorporated the use of flask-login to
+handle user sessions on the website.
