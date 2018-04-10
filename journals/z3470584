@@ -41,3 +41,10 @@ Natesh Krishna Pai (3470584)
 -Deploying the greeting contract on ethereum blockchain
 
 
+Work Dairy (Mid-Sem break)
+Natesh Krishna Pai (3470584)
+-Worked on Mist connecting via test network (Rinkeby Nework)
+-Created test accounts
+-Using the credited 10 Ether on test network, tried transferring ether between two accounts
+-Used the Remix IDE to create and deploy hello world contract
+
