@@ -65,6 +65,13 @@ def signup():
 
     return render_template('sign_up.html', form=signupform)
 
+@app.route('/watch/<int:video_id>', methods=['get', 'post'])
+def watch_video(video_id):
+    return render_template(
+        'view_video.html',
+        video_name='test video',
+        video_desc='test video desciption',
+        video_path=url_for('static', filename='videos/1.mp4'))
 
 @app.route('/logout', methods=['get', 'post'])
 @login_required

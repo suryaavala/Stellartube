@@ -1,0 +1,25 @@
+<html>
+    <head>
+        <title>{{ video_name }}</title>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    </head>
+    <body>
+        <div id="video-container">
+            <div id="video-player">
+                <video width=400 controls>
+                    <source src="{{ video_path}}" type="video/mp4">
+                    Your browser does not support HTML5 video.
+                </video>
+            </div>
+            <div id="video-info">
+                <div id="video-title">
+                    <h2>{{ video_name }}</h2>
+                </div>
+                <div id="video-desc">
+                    <h3>Description</h3>
+                    <p>{{ video_desc }}</p>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
