@@ -1,0 +1,22 @@
+<html>
+    <head>
+        <title>Sign Up</title>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    </head>
+    <body>
+        <div class="container">
+            <h1>Sign Up</h1>
+            <div id="sign-up-form">
+                <form action="" method="POST" name="signup">
+                    {{ form.hidden_tag() }}
+                    {{ form.username(class="input-field-full-width", placeholder="Username") }}
+                    {{ form.password(class="input-field-full-width", placeholder="Password") }}
+                    {{ form.confirm_password(class="input-field-full-width", placeholder="Confirm Password") }}
+                    {{ form.address(class="input-field-full-width", placeholder="Address") }}
+                    {{ form.submit(value="Create account") }}
+                </form>
+            </div>
+        </div>
+    </body>
+</html>
+
