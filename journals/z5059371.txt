@@ -37,3 +37,10 @@ for the index page.
 Mid-sem Break:
 Added a bit of css to the login page and incorporated the use of flask-login to
 handle user sessions on the website.
+
+Week 6:
+We had our first demo this week, and we are extrememly behind in terms of
+progress. So for the current sprint I have to complete most of the website.
+Fixed bugs in the login and create account page. They will be updated later
+with the updated database. Started looking at making the individual video 
+pages first rather than the index page as it is simpler to implement.
