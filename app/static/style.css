@@ -1,0 +1,31 @@
+body {
+    font-family: sans-serif;
+}
+
+
+.container {
+    height: 100%;
+    width:  344px;
+    margin: auto;
+}
+
+
+.input-field-full-width {
+    width:  100%;
+    margin: 5px 0px;
+}
+
+.container #remember_me {
+    width: 12px;
+    height: 12px;
+}
+
+.container #submit {
+    padding: 4px 16px;
+    width: auto;
+    background-color: #1473e6;
+    border: none;
+    border-radius: 16px;
+    font-weight: 700;
+    font-color: #fff;
+}
