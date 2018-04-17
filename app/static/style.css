@@ -10,7 +10,7 @@ body {
 }
 
 
-.container #username_input, #password_input {
+.input-field-full-width {
     width:  100%;
     margin: 5px 0px;
 }
