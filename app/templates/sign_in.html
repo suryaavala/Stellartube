@@ -1,23 +1,19 @@
-<html>
-    <head>
-        <title>Sign In</title>
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
-    </head>
-    <body>
-        <div class="container">
-            <h1>Sign In</h1>
-            <div id="login-form">
-                <form action="" method="POST" name="signin">
-                    {{ form.hidden_tag() }}
-                    {{ form.username(class="input-field-full-width", placeholder="Email address") }}
-                    {{ form.password(class="input-field-full-width", placeholder="Password") }}
-                    {{ form.remember_me() }}
-                    <label for="remember_me">Remember me?</label>
-                    <a href="{{ url_for('index') }}">Forgot password?</a><br><br>
-                    {{ form.submit(id="submit", value="Sign In")}}
-                </form>
-            </div>
-            <p>New to Blockheads? <a href="{{ url_for('signup') }}">Create an account</a></p>
+{% extends "base.html" %}
+{% block title %}Sign In{% endblock %}
+{% block body %}
+    <div class="container">
+        <h1>Sign In</h1>
+        <div id="login-form">
+            <form action="" method="POST" name="signin">
+                {{ form.hidden_tag() }}
+                {{ form.username(class="input-field-full-width", placeholder="Email address") }}
+                {{ form.password(class="input-field-full-width", placeholder="Password") }}
+                {{ form.remember_me() }}
+                <label for="remember_me">Remember me?</label>
+                <a href="{{ url_for('index') }}">Forgot password?</a><br><br>
+                {{ form.submit(id="submit", value="Sign In")}}
+            </form>
         </div>
-    </body>
-</html>
+        <p>New to Blockheads? <a href="{{ url_for('signup') }}">Create an account</a></p>
+    </div>
+{% endblock %}
