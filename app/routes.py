@@ -3,7 +3,7 @@ from flask_login import LoginManager, login_user, logout_user, login_required
 from app import app
 from .forms import SignInForm, SignUpForm
 from .login_manager import User
-from .database import sql_StartSQLConnection, sql_Select, sql_Insert
+from app import database as db
 
 lm = LoginManager()
 lm.init_app(app)
@@ -25,16 +25,13 @@ def signin():
     if signinform.validate_on_submit():
         username = signinform.username.data
         password = signinform.password.data
-
-        conn = sql_StartSQLConnection('localhost', 'admin', 'password', 'blockheads_db')
-        count, results = sql_Select(conn, 'select UserID, Username, Passwords from Table_UserInfo where Username="{}"'.format(username))
         
-        if count == 0:
+        if not db.sql_CheckUserExist(username):
             flash('Wrong credentials')
-        elif count == 1:
-            credentials = results[0]
-            if password == credentials[2]:
-                user = User(str(credentials[0]))
+        else:
+            print(db.sql_GetPasswordByUsername(username))
+            if password == db.sql_GetPasswordByUsername(username)[0][0]:
+                user = User(str(db.sql_GetUserIDByUsername(username)))
                 login_user(user)
                 flash('Successfully logged in')
 
@@ -51,22 +48,15 @@ def signup():
     signupform = SignUpForm()
 
     if signupform.validate_on_submit():
-        print('Hello')
         username = signupform.username.data
         password = signupform.password.data
         address = signupform.address.data
 
-        conn = sql_StartSQLConnection('localhost', 'admin', 'password', 'blockheads_db')
-        count, results = sql_Select(conn, 'select * from Table_UserInfo where Username="{}"'.format(username))
-
-        if count != 0:
+        if db.sql_CheckUserExist(username):
             flash("Username already exists")
         else:
-            sql_Insert(conn, 'insert into Table_UserInfo (Username, Passwords, Useraddress) values ("{}", "{}", "{}")'.format(username, password, address))
-            count, results = sql_Select(conn, 'select UserID from Table_UserInfo where Username="{}"'.format(username))
-            if count == 1:
-                print('hello')
-                user = User(str(results[0][0]))
+            if db.sql_InsertUserInfo(username, password, address, 0):
+                user = User(str(db.sql_GetUserIDByUsername(username)))
                 login_user(user)
                 flash('User successful created and logged in')
 
