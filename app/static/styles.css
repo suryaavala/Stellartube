@@ -29,3 +29,30 @@ body {
     font-weight: 700;
     font-color: #fff;
 }
+
+#video-content-container {
+    padding: 0px;
+    width: 100%;
+    background-color: white;
+}
+
+#video-content {
+    height: 480px;
+    overflow: hidden;
+    background-color: #212121;
+    padding: 10px 0px;
+}
+
+#video-player video {
+    height: 100%;
+    display: block;
+    margin: auto;
+}
+
+#video-info {
+    max-width: 720px;
+    margin: auto;
+}
+
+#video-title {
+    border-bottom: 1px solid #BDBDBD;
