@@ -48,3 +48,9 @@ Natesh Krishna Pai (3470584)
 -Using the credited 10 Ether on test network, tried transferring ether between two accounts
 -Used the Remix IDE to create and deploy hello world contract
 
+
+Work Dairy (Week 6/7)
+Natesh Krishna Pai (3470584)
+-Explored options on framework (MIST/ TRUFFLE) and deploying contract. Tried to deploy contract on Rinkeby Network (test network), but eventually dumped the framework due to node connectivity error.
+-Started with Sign up contract to create wallet accounts (dropped the plan and moved the work to JavaScript)
+-Wrote a JavaScript function to create ether account using 12 word Passphrase which also created and returned user key and account balance.
