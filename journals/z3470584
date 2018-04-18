@@ -49,7 +49,7 @@ Natesh Krishna Pai (3470584)
 -Used the Remix IDE to create and deploy hello world contract
 
 
-Work Dairy (Week 6/7)
+Work Dairy (Week 6)
 Natesh Krishna Pai (3470584)
 -Explored options on framework (MIST/ TRUFFLE) and deploying contract. Tried to deploy contract on Rinkeby Network (test network), but eventually dumped the framework due to node connectivity error.
 -Started with Sign up contract to create wallet accounts (dropped the plan and moved the work to JavaScript)
