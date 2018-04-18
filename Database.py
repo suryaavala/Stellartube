@@ -22,7 +22,7 @@ def sql_InitialDB(hostname, username, password, dbName):
     print("Initialing Database...:")
     try:
         conn = mdb.connect(hostname, username, password)
-        cursor = conn.cursor()        
+        cursor = conn.cursor()
         cursor.execute('CREATE DATABASE IF NOT EXISTS %s' %dbName)
         conn = mdb.connect(hostname, username, password, dbName)
         sql_CreateTable(conn)
@@ -38,7 +38,7 @@ def sql_CreateTable(conn):
     try:
         cursor.execute('CREATE TABLE IF NOT EXISTS Table_UserInfo (UserID int AUTO_INCREMENT, Username varchar(50) NOT NULL, Passwords varchar(50) NOT NULL, UserUniaddress varchar(50) NOT NULL, Balance float, primary key(UserID, Username))')
         cursor.execute('Alter table Table_UserInfo AUTO_INCREMENT=1')
-        cursor.execute('CREATE TABLE IF NOT EXISTS Table_User_Video (UserID int NOT NULL, VideoID int NOT NULL, primary key(UserID, VideoID))')
+        cursor.execute('CREATE TABLE IF NOT EXISTS Table_User_Video (UserID int NOT NULL, VideoID int NOT NULL, VideoPrice float, primary key(UserID, VideoID))')
         cursor.execute('CREATE TABLE IF NOT EXISTS Table_Video (VideoID int AUTO_INCREMENT, VideoAddress varchar(50), VideoDescription varchar(50), VideoName varchar(50), primary key(VideoID, VideoName))')
         cursor.execute('Alter table Table_Video AUTO_INCREMENT=1')
         cursor.execute('CREATE TABLE IF NOT EXISTS Table_Lable (VideoID int, Lable varchar(50), primary key(Lable, VideoID))')
@@ -46,38 +46,23 @@ def sql_CreateTable(conn):
     except Exception as error:
         print("Exception:%s" %error)
 
-#insert data into DB
-def sql_Insert(sql):
+def sql_GetConnection():
     global db_dbName
     global db_hostname
     global db_passwords
     global db_username
     conn = sql_StartSQLConnection(db_hostname, db_username, db_passwords, db_dbName)
+    return conn
+
+#insert data into DB
+def sql_Insert(sql):
+    conn = sql_GetConnection()
     cursor = conn.cursor()
     try:
         count = cursor.execute(sql)
         sql_Close(conn)
         print("Insert successfully!")
         return count
-    except Exception as error:
-        print("Exception: %s" %error)
-
-#get data from DB by select
-#return rows that are affected
-#return results
-def sql_Select(sql):
-    global db_dbName
-    global db_hostname
-    global db_passwords
-    global db_username
-
-    conn = sql_StartSQLConnection(db_hostname, db_username, db_passwords, db_dbName)
-    cursor = conn.cursor()
-    try:
-        count = cursor.execute(sql)
-        results = cursor.fetchall()
-        sql_Close(conn)
-        return count, results
     except Exception as error:
         print("Exception: %s" %error)
 
@@ -92,16 +77,11 @@ def sql_Close(conn):
     except Exception as error:
         print("Exception:%s" %error)
 
-#using the video's name get videoID
-def sql_GetVideoID(videoName):
-    global db_dbName
-    global db_hostname
-    global db_passwords
-    global db_username
-    conn = sql_StartSQLConnection(db_hostname, db_username, db_passwords, db_dbName)
+def sql_Select(sql):
+    conn = sql_GetConnection()
     cursor = conn.cursor()
     try:
-        cursor.execute('SELECT VideoID FROM TABLE_Video WHERE VideoName = %s' %videoName)
+        cursor.execute(sql)
         results = cursor.fetchall()
         sql_Close(conn)
         return results
@@ -109,91 +89,46 @@ def sql_GetVideoID(videoName):
         print("Exception: %s" %error)
     
 #get video's lables by video name
-def sql_GetLableOfVideo(videoName):
-    global db_dbName
-    global db_hostname
-    global db_passwords
-    global db_username
-    conn = sql_StartSQLConnection(db_hostname, db_username, db_passwords, db_dbName)
-    cursor = conn.cursor()
-    try:
-        videoID = sql_GetVideoID(videoName)
-        cursor.execute('SELECT Lable FROM Table_Lable WHERE VideoID = %s' %videoID)
-        results = cursor.fetchall()
-        sql_Close(conn)
-        return results
-    except Exception as error:
-        print("Exception: %s" %error)
+def sql_GetLableByVideoName(videoname):    
+    return sql_Select("SELECT Lable FROM Table_Lable WHERE VideoID = (SELECT VideoID FROM Table_Video WHERE VideoName = \'%s\')" %videoname)
 
 #Using username get password
 def sql_GetPasswordByUsername(Username):
-    global db_dbName
-    global db_hostname
-    global db_passwords
-    global db_username
-    conn = sql_StartSQLConnection(db_hostname, db_username, db_passwords, db_dbName)
-    cursor = conn.cursor()
-    try:
-        cursor.execute('SELECT Password FROM Table_UserInfo WHERE Username = %s' %Username)
-        result = cursor.fetchall()
-        sql_Close(conn)
-        return result
-    except Exception as error:
-        print("Exception: %s" %error)
+    return sql_Select("SELECT Password FROM Table_UserInfo WHERE Username = \'%s\'" %Username)
 
-def sql_GetVideosByUsername(username):
-    global db_dbName
-    global db_hostname
-    global db_passwords
-    global db_username
-    conn = sql_StartSQLConnection(db_hostname, db_username, db_passwords, db_dbName)
-    cursor = conn.cursor()
-    try:    
-        results = cursor.execute('SELECT VideoAddress FROM Table_Video WHERE VideoID = (SELECT VideoID FROM Table_User_Video WHERE UserID = (SELECT UserID FROM Table_UserInfo WHERE Username = %s))' %username)
-        sql_Close(conn)
-        return results
-    except Exception as error:
-        print("Exception: %s" %error)
+def sql_GetVideoAddressByVideoID(videoID):
+    return sql_Select("SELECT VideoAddress FROM Table_Video WHERE VideoID = \'%d\'" %videoID)
+
+def sql_GetVideoIDByVideoName(videoname):
+    return sql_Select("SELECT VideoID FROM Table_Video WHERE VideoName = \'%s\'" %videoname)
+
+def sql_GetVideoNameByLable(lable):
+    return sql_Select("SELECT VideoName FROM Table_Video WHERE VideoID = (SELECT VideoID FROM Table_Lable WHERE Lable = \'%s\')" %lable)
+
+def sql_GetVideoIDByUserID(userID):
+    return sql_Select("SELECT VideoID FROM Table_User_Video WHERE UserID = \'%d\'" %userID)
+
+def sql_GetVideosNameByUserID(userID):
+    return sql_Select("SELECT VideoName FROM Table_Video WHERE VideoID = (SELECT VideoID FROM Table_User_Video WHERE UserID = \'%d\')" %userID)
 
 def sql_GetUserIDByUsername(username):
-    global db_dbName
-    global db_hostname
-    global db_passwords
-    global db_username
-    conn = sql_StartSQLConnection(db_hostname, db_username, db_passwords, db_dbName)
-    cursor = conn.cursor()
-    try:
-        cursor.execute("SELECT UserID FROM Table_UserInfo WHERE Username = \'%s\'" %username)
-        result = cursor.fetchall();
-        sql_Close(conn)
-        return result
-    except Exception as error:
-        print("Exception:%s" %error)
-        return 0
+    return sql_Select("SELECT UserID FROM Table_UserInfo WHERE Username = \'%s\'" %username)
 
-def sql_InserUserInfo(username, passwords, useruniaddress, balance):
-    global db_dbName
-    global db_hostname
-    global db_passwords
-    global db_username
+def sql_InsertUserVideo(userID, videoID, price):
+    sql_Insert("INSERT INTO Table_User_Video values(\'%d\', \'%d\')" %(userID, videoID))
 
-    conn = sql_StartSQLConnection(db_hostname, db_username, db_passwords, db_dbName)
-    cursor = conn.cursor()
-    try:
-        cursor.execute("INSERT INTO Table_UserInfo values(null, \'%s\', \'%s\', \'%s\', %f)" %(username, passwords, useruniaddress, balance))
-        sql_Close(conn)
-        return 1
-    except Exception as error:
-        print("Exception:%s" %error)
-        return 0
+def sql_InsertUserInfo(username, passwords, useruniaddress, balance):
+    sql_Insert("INSERT INTO Table_UserInfo values(null, \'%s\', \'%s\', \'%s\', \'%f\')" %(username, passwords, useruniaddress, balance))
+
+def sql_InsertVideoInfo(videoaddress, videodescription, videoname):
+    sql_Insert("INSERT INTO Table_Video values(null, \'%s\', \'%s\', \'%s\')" %(videoaddress, videodescription, videoname))
+
+def sql_InsertVideosLable(videoname, lable):
+    videoIDs = sql_GetVideoIDByVideoName(videoname)
+    sql_Insert("INSERT INTO Table_Lable values( (SELECT VideoID FROM Table_Video WHERE VideoName = \'%s\'), \'%s\')" %(videoname, lable))
     
 def sql_CheckUserExist(usernmae):
-    global db_dbName
-    global db_hostname
-    global db_passwords
-    global db_username
-
-    conn = sql_StartSQLConnection(db_hostname, db_username, db_passwords, db_dbName)
+    conn = sql_GetConnection()
     cursor = conn.cursor()
     try:
         count = cursor.execute("SELECT * FROM Table_UserInfo WHERE Username = \'%s\'" %usernmae)
