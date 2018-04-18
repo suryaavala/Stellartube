@@ -113,6 +113,10 @@ def sql_GetVideosNameByUserID(userID):
 
 def sql_GetUserIDByUsername(username):
     return sql_Select("SELECT UserID FROM Table_UserInfo WHERE Username = \'%s\'" %username)
+    
+def sql_GetVideoNameByLike(name):
+    args = '%'+name+'%'
+    return sql_Select("SELECT VideoName FROM Table_Video WHERE VideoName LIKE '%s'" %args)
 
 def sql_InsertUserVideo(userID, videoID, price):
     sql_Insert("INSERT INTO Table_User_Video values(\'%d\', \'%d\')" %(userID, videoID))
