@@ -1,9 +1,11 @@
 <html>
     <head>
         <title>{% block title %}{% endblock %}</title>
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}?version=16">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}?version=25">
     </head>
     <body>
+        {% block topbar %}
+        {% endblock %}
         {% block body %}
         {% endblock %}
     </body>
