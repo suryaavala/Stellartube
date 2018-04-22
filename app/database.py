@@ -36,6 +36,7 @@ def sql_CreateTable(conn):
 
     cursor = conn.cursor()    
     try:
+        cursor.execute('CREATE TABLE IF NOT EXISTS Table_WalletInfo (UserID int AUTO_INCREMENT, PrivateKey TEXT NOT NULL, PublicKey TEXT, KeyStore TEXT, SeedPhrase TEXT, primary key(UserID))')
         cursor.execute('CREATE TABLE IF NOT EXISTS Table_UserInfo (UserID int AUTO_INCREMENT, Username varchar(50) NOT NULL, Passwords varchar(50) NOT NULL, UserUniaddress varchar(50) NOT NULL, Balance float, primary key(UserID, Username))')
         cursor.execute('Alter table Table_UserInfo AUTO_INCREMENT=1')
         cursor.execute('CREATE TABLE IF NOT EXISTS Table_User_Video (UserID int NOT NULL, VideoID int NOT NULL, primary key(UserID, VideoID))')
