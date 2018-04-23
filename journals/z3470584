@@ -51,6 +51,15 @@ Natesh Krishna Pai (3470584)
 
 Work Dairy (Week 6)
 Natesh Krishna Pai (3470584)
--Explored options on framework (MIST/ TRUFFLE) and deploying contract. Tried to deploy contract on Rinkeby Network (test network), but eventually dumped the framework due to node connectivity error.
+-Explored options on framework (MIST/ TRUFFLE) and deploying contract. Tried to deploy contract on Rinkeby Network (test network), but eventually dumped the framework due to node connectivity error
 -Started with Sign up contract to create wallet accounts (dropped the plan and moved the work to JavaScript)
--Wrote a JavaScript function to create ether account using 12 word Passphrase which also created and returned user key and account balance.
+-Wrote a JavaScript function to create ether account using 12 word Passphrase which also created and returned user key (Public & Private)
+
+Work Dairy (Week 7)
+Natesh Krishna Pai (3470584)
+-Did a setup of Application on my local system
+-Updated Yunhe's database.py script to create a new table to store user ID, PublicKey, PrivateKey, Passphrase and Keystore
+-Installed MySQL Community Server and executed Yunhe's database script to create database and tables
+-Installed NodeJs and Python
+-Successfully created a ether account and tested the private key/ Seed Phrase on myetherwallet.com to unlock and get the public key
+-Attended team meeting and demonstrated the work to our Scrum Master
