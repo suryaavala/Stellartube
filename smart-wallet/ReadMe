@@ -1,0 +1,21 @@
+Application installed: Python, MySQL Community Server, NodeJs and libraries mysql-python, flash, flask_login, flask_wtf
+
+Run the database.py and run.py script
+    python database.py
+    python run.py
+    
+Run npm install --global --production windows-build-tools
+
+Keep the server running on port 3900 and run npm start
+
+Now keep the server running on port 3000 and send a Post request with JSON body having username and password
+    POST
+    http://localhost:3000/wallet
+    {
+        username: "uname",
+        password: "passwd"
+    }
+    
+The app.js would generate a 12 words passphrase and create PublicKey, PrivateKey and Keystore and store it in the database table "table_walletinfo"
+
+To verify: Copy the PrivateKey or the Seed Phrase and try unlocking it on myetherwallet.com/ Mist/ or any other platform, it should provide you the matching PublicKey exactly same as the one generated from app.js
