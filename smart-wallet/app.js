@@ -18,11 +18,11 @@ var connection = mysql.createConnection({
 connection.connect();
 
 
-app.post('/wallet', function(req, res) { // it will listen for a post method, it will listen for the call your another application is doing
+app.post('/wallet', function(req, res) { // it will listen for a post method with JSON body having "username" and "password"
 	var username = (req.body.username);
 	var password = (req.body.password);
 
-	connection.query('SELECT * FROM Table_UserInfo WHERE Username = "'+username+'"', function (error, results, fields) {
+	connection.query('SELECT * FROM Table_UserInfo WHERE Username = "'+username+'"', function (error, results, fields) { //to check if the user exists in the database
 	  if (error) { console.log(error); } else if (results.length) {
 	  	// found user
 	  	var userinfo = results[0];
@@ -48,7 +48,7 @@ app.post('/wallet', function(req, res) { // it will listen for a post method, it
 						ks.keyFromPassword(password, function(err, pwDerivedKey) {
 							if (err) { res.send(err); } else {
 								ks.generateNewAddress(pwDerivedKey, 1); // this is used to generate the ethereum address on the basis of seed phrase
-								var serialzedKeystore = ks.serialize(); // this is users json wallet
+								var serialzedKeystore = ks.serialize(); // this is users json wallet that contains encrypted information about private key and other details
 								var publicKey = (ks.getAddresses()[0]);
 								var privateKey = (ks.exportPrivateKey(ks.getAddresses()[0], pwDerivedKey)); // this is ethereum private key
 								var user = {
@@ -74,12 +74,12 @@ app.post('/wallet', function(req, res) { // it will listen for a post method, it
 	  	} else {
 	  		// invalid password
 	  		// not authorized
-	  		res.send("password is invalid");
+	  		res.send("Password is Invalid");
 	  	}
 	  } else {
 	  	// user not present
 	  	// invalid user
-	  	res.send("user not found");
+	  	res.send("User not found");
 	  }
 	});
 
@@ -87,5 +87,5 @@ app.post('/wallet', function(req, res) { // it will listen for a post method, it
 });
 
 app.listen(3000, function(){
-	console.log('Example app listening on port 3000!')
+	console.log('Blockheads app listening on port 3000!')
 });
