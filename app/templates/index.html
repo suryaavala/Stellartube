@@ -1,6 +1,17 @@
 {% extends "base_nav.html" %}
 {% block title %}Blockmart{% endblock %}
 {% block body %}
-    <h1>Index</h1>
+    <div id="main">
+        <div class="video-library-container">
+            {% for video in videos %}
+            <a href="{{ url_for('watch_video', video_id=video.id) }}">
+                <div class="video-tile">
+                    <img class="video-tile-thumbnail" src="{{ video.thumbnail_location }}"/>
+                    <div class="video-tile-title">{{ video.title }}</div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}
 
