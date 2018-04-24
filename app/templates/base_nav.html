@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block topnav %}
+    <ul class="container-topnav">
+        <li id="topnav-menu">
+            <a href="javascript:void(0)" onclick="openSideNav()">
+                <img src="{{ url_for('static', filename='images/topbar_menu_icon.svg') }}"/>
+            </a>
+        </li>
+        <li id="topnav-logo">
+            <a href="{{ url_for('index') }}">
+                <img src="{{ url_for('static', filename='images/blockmart_logo.svg') }}"/>
+            </a>
+        </li>
+        <li>
+            <div id="topnav-search"></div>
+        </li>
+        <div class="topnav-right">
+            {% if current_user.is_authenticated %}
+            <li id="topnav-right-user">
+                <span>Hello, {{ current_user.get_username() }}</span>
+            </li>
+            <li>
+                <a href="{{ url_for('logout') }}">Logout</a>
+            </li>
+            {% else %}
+            <li>
+                <a href="{{ url_for('signin') }}">Sign In</a>
+            </li>
+            {% endif %}
+        </div>
+    </ul>
+{% endblock %}
+{% block sidenav %}
+    <div id="sidenav" class="container-sidenav">
+        <a href="javascript:void(0)" class="sidenav-close-button" onclick="closeSideNav()">x</a>
+        <a href="{{ url_for('index') }}">Home</a>
+        {% if current_user.is_authenicated %}
+        <a href="javascript:void(0)">Upload</a>
+        <a href="javascript:void(0)">My Videos</a>
+        <a href="javascript:void(0)">Purchases</a>
+        {% endif %}
+        <a href="javascript:void(0)">Help</a>
+    </div>
+    <script>
+        function openSideNav() {
+            document.getElementById("sidenav").style.width = "240px";
+            document.getElementById("main").style.marginLeft = "240px";
+        }
+
+        function closeSideNav() {
+            document.getElementById("sidenav").style.width = "0";
+            document.getElementById("main").style.marginLeft = "0";
+        }
+    </script>
+{% endblock %}

@@ -1,10 +1,12 @@
 <html>
     <head>
         <title>{% block title %}{% endblock %}</title>
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}?version=25">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}?version=">
     </head>
     <body>
-        {% block topbar %}
+        {% block topnav %}
+        {% endblock %}
+        {% block sidenav %}
         {% endblock %}
         {% block body %}
         {% endblock %}
