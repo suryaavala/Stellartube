@@ -29,7 +29,6 @@ def signin():
         if not db.sql_CheckUserExist(username):
             flash('Wrong credentials')
         else:
-            print(db.sql_GetPasswordByUsername(username))
             if password == db.sql_GetPasswordByUsername(username):
                 user = User(str(db.sql_GetUserIDByUsername(username)))
                 login_user(user)

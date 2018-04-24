@@ -3,7 +3,6 @@ body {
     margin: 0;
 }
 
-
 .container {
     height: 100%;
     width:  344px;
@@ -102,10 +101,24 @@ body {
     width: 48px;
     margin: auto;
     position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
+}
+
+#container-topbar {
+    height: 56px;
+    padding: 0px 8px;
+}
+
+#topbar-menu {
+    height: 56px;
+    width: 56px;
+    float: left;
+    position: relative;
+}
+
+#topbar-menu img {
+    height: 32px;
+    width: 32px;
+    margin: auto;
 }
 
 .topnav-right {
@@ -165,4 +178,19 @@ body {
     right: 0;
     padding: 0;
     margin: 8px;
+    position: absolute;
+}
+
+#topbar-logo {
+    height: 100%;
+    position: relative;
+}
+
+#topbar-logo a img {
+    height: 48px;
+    width: 48px;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    position: absolute;
 }

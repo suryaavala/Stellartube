@@ -171,7 +171,6 @@ def sql_GetUsernameByUserID(userid):
         print("Exception: %s" %error)
         return 0
 
-
 def sql_GetUserIDByUsername(username):
     global db_dbName
     global db_hostname
