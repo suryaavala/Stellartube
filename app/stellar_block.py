@@ -39,6 +39,9 @@ class Stellar_block():
         kp = self._generate_keypair()
         return kp.seed().decode()
 
+    def get_passphrase(self):
+        return self.mnemonic_secret
+
     def _generate_keypair(self):
         if self.mnemonic_secret:
             kp = Keypair.deterministic(self.mnemonic_secret)
