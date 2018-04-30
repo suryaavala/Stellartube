@@ -8,6 +8,7 @@ from app import database as db
 from werkzeug.utils import secure_filename
 import flask_login as fl
 import os
+from stellar_block import Stellar_block
 
 # Specify login view for login manager
 lm.lm.login_view = 'signin'
@@ -52,6 +53,7 @@ def signin():
 
     return render_template('sign_in.html', form=signinform)
 
+
 @app.route('/signup', methods=['get', 'post'])
 def signup():
     signupform = frm.SignUpForm()
@@ -75,6 +77,7 @@ def signup():
 
     return render_template('sign_up.html', form=signupform)
 
+
 @app.route('/watch/<int:video_id>', methods=['get', 'post'])
 def watch_video(video_id):
     video = db.sql_getVideo(video_id)
@@ -90,6 +93,7 @@ def watch_video(video_id):
         videoIsOwned = True if fl.current_user.is_authenticated and 
             str(fl.current_user.id) == str(video[0]) else False,
         videoIsPurchased = False)
+
 
 @app.route('/logout', methods=['get', 'post'])
 @fl.login_required
