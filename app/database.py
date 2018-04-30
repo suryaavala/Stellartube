@@ -7,19 +7,23 @@ db_username = 'admin'
 db_passwords = 'password'
 db_dbName = 'DB_DApp2'
 
-#Function used to connect to DB
-#Parameters: 
-def sql_StartSQLConnection(hostname, username, password, dbName):    
-#    print("Connecting to database server...")
+# Function used to connect to DB
+# Parameters:
+
+
+def sql_StartSQLConnection(hostname, username, password, dbName):
+    print("Connecting to database server...")
     try:
         conn = mdb.connect(hostname, username, password, dbName)
-#        print("Successfully connected to database %s!" %dbName)
+        print("Successfully connected to database %s!" % dbName)
         return conn
     except Exception as error:
-        print("Exception:%s" %error)
+        print("Exception:%s" % error)
         return
 
-#Initialize Data base
+# Initialize Data base
+
+
 def sql_InitialDB(hostname, username, password, dbName):
     print("Initialing Database...:")
     try:
@@ -32,12 +36,14 @@ def sql_InitialDB(hostname, username, password, dbName):
         sql_Close(conn)
 #        print("Successfully Initialed")
     except Exception as error:
-        print("Exception: %s" %error)
-   
-#Create tables for DApp
+        print("Exception: %s" % error)
+
+# Create tables for DApp
+
+
 def sql_CreateTable(conn):
 
-    cursor = conn.cursor()    
+    cursor = conn.cursor()
     try:
         cursor.execute('CREATE TABLE IF NOT EXISTS Table_Users (UserID int AUTO_INCREMENT, Email varchar(32) NOT NULL, Password varchar(32) NOT NULL, FirstName varchar(32) NOT NULL, LastName varchar(32), primary key(UserID, Email))')
         cursor.execute('Alter table Table_Users AUTO_INCREMENT=1')
@@ -49,7 +55,7 @@ def sql_CreateTable(conn):
         cursor.execute('Alter table Table_Comments AUTO_INCREMENT=1')
 #        print("Create tables successfully!")
     except Exception as error:
-        print("Exception:%s" %error)
+        print("Exception:%s" % error)
 
 def sql_GetConnection():
     global db_dbName
@@ -69,7 +75,7 @@ def sql_Insert(sql):
 #        print("Insert successfully!")
         return count
     except Exception as error:
-        print("Exception: %s" %error)
+        print("Exception: %s" % error)
 
 #Close connection and write in data
 def sql_Close(conn):    
@@ -80,7 +86,7 @@ def sql_Close(conn):
         conn.close()
 #        print("Disconnected successfuly")
     except Exception as error:
-        print("Exception:%s" %error)
+        print("Exception:%s" % error)
 
 def sql_Select(sql):
     conn = sql_GetConnection()
@@ -116,7 +122,7 @@ def sql_doesUserExist(email):
         result = cursor.fetchone()
         return result[0]
     except Exception as error:
-        print("Exception: %s" %error)
+        print("Exception: %s" % error)
         return 0
 
 #Using username get password
