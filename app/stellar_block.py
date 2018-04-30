@@ -36,7 +36,7 @@ class Stellar_block():
         '''
         Get's seed from mnemonic_secret
         '''
-        kp = self._generate_keypair(self.mnemonic_secret)
+        kp = self._generate_keypair()
         return kp.seed().decode()
 
     def _generate_keypair(self):
