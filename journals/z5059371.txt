@@ -44,3 +44,16 @@ progress. So for the current sprint I have to complete most of the website.
 Fixed bugs in the login and create account page. They will be updated later
 with the updated database. Started looking at making the individual video 
 pages first rather than the index page as it is simpler to implement.
+
+Week 7:
+My main focus for this week was to implement a video playback page for the
+websites content. I was able to create a page that only served one of the
+videos i had stored and did a little styling. As well as this, I worked on
+some bugs with the login and sign up pages.
+
+Week 8:
+This week I implemented a basic homepage with links to all the videos I
+had stored. The links were unstyled. Also created a template for top and
+side navigation bars, which were then incorporated into the website. These
+elements are styled. Having trouble though adding more menu options to the
+side navigation bar when the user is logged in.
