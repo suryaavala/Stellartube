@@ -23,7 +23,6 @@ def load_user(userid):
 def index():
     count, results = db.sql_Select("select VideoID, VideoName from Table_Video")
     videos = [videoInfo(v[0], v[1], url_for('static', filename='images/blockmart_logo.svg')) for v in results] 
-    print(videos[0].id)
     return render_template('index.html', videos=videos)
 
 @app.route('/signin', methods=['get', 'post'])
@@ -80,7 +79,11 @@ def watch_video(video_id):
         'view_video.html',
         video_name=video[0][3],
         video_desc=video[0][2],
-        video_path=url_for('static', filename='videos/%s.mp4'%str(video[0][0])))
+        video_path=url_for('static', filename='videos/%s.mp4'%str(video[0][0])),
+        videoPrice = 0,
+        videoIsPublic = False,
+        videoIsOwned = False,
+        videoIsPurchased = False)
 
 @app.route('/logout', methods=['get', 'post'])
 @login_required

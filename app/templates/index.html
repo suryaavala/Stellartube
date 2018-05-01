@@ -2,14 +2,14 @@
 {% block title %}Blockmart{% endblock %}
 {% block body %}
     <div id="main">
-        <div class="video-library-container">
+        <div id="video-tile-container">
             {% for video in videos %}
-            <a href="{{ url_for('watch_video', video_id=video.id) }}">
-                <div class="video-tile">
+            <div class="video-tile">
+                <a href="{{ url_for('watch_video', video_id=video.id) }}">
                     <img class="video-tile-thumbnail" src="{{ video.thumbnail_location }}"/>
                     <div class="video-tile-title">{{ video.title }}</div>
-                </div>
-            </a>
+                </a>
+            </div>
             {% endfor %}
         </div>
     </div>
