@@ -9,13 +9,21 @@ lm = LoginManager()
 lm.init_app(app)
 lm.login_view = 'login'
 
+class videoInfo():
+    def __init__(self, videoid, title, thumbnail_location):
+        self.id = videoid
+        self.title = title
+        self.thumbnail_location = thumbnail_location
+
 @lm.user_loader
 def load_user(userid):
     return User(userid)
 
 @app.route('/', methods=['get', 'post'])
 def index():
-    return render_template('index.html')
+    count, results = db.sql_Select("select VideoID, VideoName from Table_Video")
+    videos = [videoInfo(v[0], v[1], url_for('static', filename='images/blockmart_logo.svg')) for v in results] 
+    return render_template('index.html', videos=videos)
 
 @app.route('/signin', methods=['get', 'post'])
 def signin():
@@ -29,8 +37,7 @@ def signin():
         if not db.sql_CheckUserExist(username):
             flash('Wrong credentials')
         else:
-            print(db.sql_GetPasswordByUsername(username))
-            if password == db.sql_GetPasswordByUsername(username)[0][0]:
+            if password == db.sql_GetPasswordByUsername(username):
                 user = User(str(db.sql_GetUserIDByUsername(username)))
                 login_user(user)
                 flash('Successfully logged in')
@@ -64,6 +71,19 @@ def signup():
                 return redirect(next or url_for('index'))
 
     return render_template('sign_up.html', form=signupform)
+
+@app.route('/watch/<int:video_id>', methods=['get', 'post'])
+def watch_video(video_id):
+    count, video = db.sql_Select('select * from Table_Video where VideoID = "%s"'%str(video_id))
+    return render_template(
+        'view_video.html',
+        video_name=video[0][3],
+        video_desc=video[0][2],
+        video_path=url_for('static', filename='videos/%s.mp4'%str(video[0][0])),
+        videoPrice = 0,
+        videoIsPublic = False,
+        videoIsOwned = False,
+        videoIsPurchased = False)
 
 @app.route('/logout', methods=['get', 'post'])
 @login_required

@@ -105,7 +105,7 @@ def sql_GetVideoID(videoName):
         cursor.execute('SELECT VideoID FROM TABLE_Video WHERE VideoName = "%s"' %videoName)
         results = cursor.fetchall()
         sql_Close(conn)
-        return results
+        return results[0][0]
     except Exception as error:
         print("Exception: %s" %error)
     
@@ -122,7 +122,7 @@ def sql_GetLableOfVideo(videoName):
         cursor.execute('SELECT Lable FROM Table_Lable WHERE VideoID = "%s"' %videoID)
         results = cursor.fetchall()
         sql_Close(conn)
-        return results
+        return results[0][0]
     except Exception as error:
         print("Exception: %s" %error)
 
@@ -138,7 +138,7 @@ def sql_GetPasswordByUsername(Username):
         cursor.execute('SELECT Passwords FROM Table_UserInfo WHERE Username = "%s"' %Username)
         result = cursor.fetchall()
         sql_Close(conn)
-        return result
+        return result[0][0]
     except Exception as error:
         print("Exception: %s" %error)
 
@@ -156,6 +156,22 @@ def sql_GetVideosByUsername(username):
     except Exception as error:
         print("Exception: %s" %error)
 
+def sql_GetUsernameByUserID(userid):
+    global db_dbName
+    global db_hostname
+    global db_passwords
+    global db_username
+    conn = sql_StartSQLConnection(db_hostname, db_username, db_passwords, db_dbName)
+    cursor = conn.cursor()
+    try:
+        cursor.execute('SELECT Username FROM Table_UserInfo WHERE UserID = "%s"' %userid)
+        result = cursor.fetchall()
+        sql_Close(conn)
+        return result[0][0]
+    except Exception as error:
+        print("Exception: %s" %error)
+        return 0
+
 def sql_GetUserIDByUsername(username):
     global db_dbName
     global db_hostname
@@ -167,7 +183,7 @@ def sql_GetUserIDByUsername(username):
         cursor.execute('SELECT UserID FROM Table_UserInfo WHERE Username = "%s"' %username)
         result = cursor.fetchall();
         sql_Close(conn)
-        return result
+        return result[0][0]
     except Exception as error:
         print("Exception: %s" %error)
         return 0
