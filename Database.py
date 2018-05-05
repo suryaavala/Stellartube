@@ -42,9 +42,11 @@ def sql_CreateTable(conn):
         cursor.execute('CREATE TABLE IF NOT EXISTS Table_Users (UserID int AUTO_INCREMENT, Email varchar(32) NOT NULL, Password varchar(32) NOT NULL, FirstName varchar(32) NOT NULL, LastName varchar(32), primary key(UserID, Email))')
         cursor.execute('Alter table Table_Users AUTO_INCREMENT=1')
         cursor.execute('CREATE TABLE IF NOT EXISTS Table_Purchases (VideoID int NOT NULL, UserID int NOT NULL, Date Date, primary key(UserID, VideoID))')
-        cursor.execute('CREATE TABLE IF NOT EXISTS Table_Videos (VideoID int AUTO_INCREMENT, Owner int, DateAdded Date, Title varchar(120), Description varchar(50),Price float, FileName varchar(255), primary key(VideoID))')
-        cursor.execute('Alter table Table_Video AUTO_INCREMENT=1')
+        cursor.execute('CREATE TABLE IF NOT EXISTS Table_Videos (VideoID int AUTO_INCREMENT, Owner int, DateAdded Date, Title varchar(120), Description varchar(50),Price float, FileName varchar(255), Lables varchar(50), primary key(VideoID))')
+        cursor.execute('Alter table Table_Videos AUTO_INCREMENT=1')
         cursor.execute('CREATE TABLE IF NOT EXISTS Table_Lable (VideoID int, Lable varchar(50), primary key(Lable, VideoID))')
+        cursor.execute('CREATE TABLE IF NOT EXISTS Table_Comments (CommentID int primary key AUTO_INCREMENT, VideoID int, DatePosted Date, ParentID int, Content varchar(500))')
+        cursor.execute('Alter table Table_Comments AUTO_INCREMENT=1')
         print("Create tables successfully!")
     except Exception as error:
         print("Exception:%s" %error)
@@ -88,6 +90,16 @@ def sql_Select(sql):
         results = cursor.fetchall()
         sql_Close(conn)
         return results
+    except Exception as error:
+        print("Exception: %s" %error)
+
+def sql_Update(sql):
+    conn = sql_GetConnection()
+    cursor = conn.cursor()
+    try:
+        count = cursor.execute(sql)
+        sql_Close(conn)
+        return count
     except Exception as error:
         print("Exception: %s" %error)
     
@@ -141,6 +153,14 @@ def sql_searchVideos(searchString, maxResults):
     else:
         return ls_video
     
+def sql_getVideoComments(videoID):    
+    results = sql_Select("SELECT Content FROM Table_Comments WHERE VideoID = \'%s\'" %videoID)
+    return results
+
+def sql_getComments(commentID):
+    results = sql_Select("SELECT DatePosted, ParentID, Content FROM Table_Comments WHERE CommentID = \'%s\'" %commentID)
+    return results
+
 def checkVideoPurchase(videoID, userID):
     result = sql_Select("SELECT Date FROM Table_Purchase WHERE VideoID = \'%s\' UserID = \'%s\'" %(videoID, userID))
     if len(result) > 0:
@@ -156,19 +176,55 @@ def sql_addPurchase(videoID, userID):
     else:
         return 1
 
-def sql_addUser(email, password, firstname, lastname):
+def sql_addComment(videoID, parentsID, content):
+    date = datetime.datetime.now().strftime("%Y-%m-%d")
+    count =  sql_Insert("INSERT INTO Table_Comments values(null, \'%d\', \'%s\', \'%d\', \'%s\')" %(videoID, date, parentsID, content))
+    if count == 1:
+        return 0
+    else:
+        return 1
+
+def sql_addUser(email, password, firstname, lastname):    
     count = sql_Insert("INSERT INTO Table_Users values(null, \'%s\', \'%s\', \'%s\', \'%s\')" %(email, password, firstname, lastname))
     if count == 1:
         return 0
     else:
         return 1
 
-def sql_addVideo(userID, title, decription, price, file):
+def sql_addVideo(userID, title, decription, price, file, lable):
     date = datetime.datetime.now().strftime("%Y-%m-%d")
-    count = sql_Insert("INSERT INTO Table_Videos values(null, \'%d\', \'%s\', \'%s\', \'%s\', \'%f\', \'%s\')" %(userID, date, title, decription, price, file))
+    count = sql_Insert("INSERT INTO Table_Videos values(null, \'%d\', \'%s\', \'%s\', \'%s\', \'%f\', \'%s\', \'%s\')" %(userID, date, title, decription, price, file, lable))
     if count == 1:
         return 0
     else:
+        return 1
+
+def sql_editUserEmail(userID, newEmail):
+    result = sql_Update("UPDATE Table_Users SET Email = \'%s\' WHERE UserID = \'%d\'" %(newEmail, userID))
+    if result == 1:
+        return 0
+    else:
+        return 1
+
+def sql_editUserPassword(userID, newPassword):
+    result = sql_Update("UPDATE Table_Users SET Password = \'%s\' WHERE UserID = \'%d\'" %(newPassword, userID))
+    if result == 1:
+        return 0
+    else:
+        return 1
+
+def sql_editVideoInfo(videoID, newTitle, newDescription, newLables):
+    sql = "UPDATE Table_Videos SET "
+    try:
+        if newTitle != '':
+            sql_Update(sql + "Title = \'%s\' WHERE VideoID = \'%d\'" %(newTitle, videoID))
+        if newDescription != '':
+            sql_Update(sql + "Description = \'%s\' WHERE VideoID = \'%d\'" %(newDescription, videoID))
+        if newLables != '':
+            sql_Update(sql + "Lable = \'%s\' WHERE VideoID = \'%d\'" %(newLables, videoID))
+        return 0
+    except Exception as error:
+        print("Exception: %s" %error)
         return 1
 
 def sql_InsertVideosLable(videoname, lable):
