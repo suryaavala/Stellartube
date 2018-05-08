@@ -29,6 +29,7 @@ def index():
     
     searchform = frm.SearchForm()
     if searchform.validate_on_submit():
+        print(searchform.search_string.data)
         return redirect(url_for('search', search_string=searchform.search_string.data))
 
     return render_template('index.html', videos=videos, search_form=searchform)
@@ -91,7 +92,7 @@ def watch_video(video_id):
     searchform = frm.SearchForm()
     if searchform.validate_on_submit():
         return redirect(url_for('search', search_string=searchform.search_string.data))
-    
+
     return render_template(
         'view_video.html',
         video_id=video_id,
@@ -100,7 +101,7 @@ def watch_video(video_id):
         video_path=url_for('static', filename='videos/%s'%video[5]),
         videoPrice = video[4],
         videoIsPublic = True if float(video[4]) == 0 else False,
-        videoIsOwned = True,
+        videoIsOwned = True if str(fl.current_user.id) == str(video[0]) else False,
         videoIsPurchased = False,
         search_form=searchform)
 
