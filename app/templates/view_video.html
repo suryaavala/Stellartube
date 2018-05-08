@@ -5,7 +5,7 @@
         <div id="video-content">
             <div id="video-player">
                 <video controls>
-                    <source src="{{ video_path}}" type="video/mp4">
+                    <source src="{{ video_path }}" type="video/mp4">
                     Your browser does not support HTML5 video.
                 </video>
             </div>
@@ -32,8 +32,8 @@
                     {% endif %}
                 </div>
                 {% endif %}
-                {% if videoPrice == 0 or videoIsPublic or videoIsPurchased or videoIsOwned%}
-                <a href="javascript:void(0)">Download</a>
+                {% if videoPrice == 0 or videoIsPublic or videoIsPurchased or videoIsOwned %}
+                <a href="{{ url_for('download', video_id=video_id) }}">Download</a>
                 {% else %}
                 <a href="javascript:void(0)">Buy Now</a>
                 {% endif %}

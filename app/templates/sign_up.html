@@ -6,10 +6,11 @@
         <div id="sign-up-form">
             <form action="" method="POST" name="signup">
                 {{ form.hidden_tag() }}
-                {{ form.username(class="input-field-full-width", placeholder="Username") }}
+                {{ form.first_name(class="input-field-full-width", placeholder="First Name") }}
+                {{ form.last_name(class="input-field-full-width", placeholder="Last Name") }}
+                {{ form.email(class="input-field-full-width", placeholder="Email") }}
                 {{ form.password(class="input-field-full-width", placeholder="Password") }}
                 {{ form.confirm_password(class="input-field-full-width", placeholder="Confirm Password") }}
-                {{ form.address(class="input-field-full-width", placeholder="Address") }}
                 {{ form.submit(value="Create account") }}
             </form>
         </div>
