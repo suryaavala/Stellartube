@@ -40,31 +40,41 @@ body {
  *
  */
 
-.container-topnav {
+.topnav {
     height: 56px;
     padding: 0;
     margin: 0;
-    list-style-type: none;
     overflow: hidden;
     background-color: #eceff1;
 }
 
-.container-topnav li {
+.topnav .nav-element {
     display: inline-block;
     float: left;
     position: relative;
     height: inherit;
 }
 
-.container-topnav li a {
+.topnav .nav-element a {
     display: inline-block;
     position: relative;
 }
 
-#topnav-menu a{
+#topnav-menu {
+    height: 56px;
+    width: 56px;
+}
+
+#topnav-menu a {
     height: 32px;
     width: 32px;
-    margin: 12px;
+    margin: auto;
+    padding: 0;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
 }
 
 #topnav-menu img {
@@ -82,13 +92,17 @@ body {
     width: 48px;
     margin: auto;
     position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
 }
 
-.topnav-right {
+.topnav .topnav-right {
     float: right;
 }
 
-.topnav-right li * {
+.topnav .topnav-right .nav-element * {
     padding: 0px 16px;
     color: #263238;
     text-align: center;
@@ -96,7 +110,7 @@ body {
     text-decoration: none;
 }
 
-.topnav-right li a:hover {
+.topnav .topnav-right .nav-element a:hover {
     color: #eceff1;
     background-color: #263238;
 }
