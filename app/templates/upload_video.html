@@ -1,0 +1,18 @@
+{% extends "base_nav.html" %}
+{% block title %}Upload a Video{% endblock %}
+{% block body %}
+    <div id="main">
+        <div class=upload-form">
+            <h1>Upload a Video</h1>
+            <form action="" method="POST" name="uploadform" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
+                {{ form.title(id="upload-form-title", class="input-field-full-width", placeholder="Title", maxLength=120) }}
+                {{ form.description(id="upload-form-descr", class="input-field-full-with", placeholder="Description", maxLength=500) }}
+                {{ form.price(id="upload-form-price", placeholder="Price") }}
+                {{ form.labels(id="upload-form-labels", placeholder="Labels") }}
+                {{ form.video_file(id="upload-form-file") }}
+                {{ form.submit(value="Upload") }}
+            </form>
+        </div>
+    </div>
+{% endblock %}
