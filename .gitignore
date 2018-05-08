@@ -2,3 +2,4 @@ env/
 __pycache__
 *.py[cod]
 app/static/videos/*
+app/upload
