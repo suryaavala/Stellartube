@@ -57,3 +57,10 @@ had stored. The links were unstyled. Also created a template for top and
 side navigation bars, which were then incorporated into the website. These
 elements are styled. Having trouble though adding more menu options to the
 side navigation bar when the user is logged in.
+
+Week 9:
+This week I started implementing the upload and search pages of the website.
+Also fixed the bug that was giving me trouble with the side navigation bar
+and implemented the download function for the videos. Cleaned up the code a
+bit and updated the code to use the new database library functions implemented
+by Casaer.
