@@ -12,10 +12,9 @@
             </a>
         </div>
         <div id="topnav-search" class="nav-element">
-            <form action="" method="POST" name="search">
-                {{ search_form.hidden_tag() }}
-                {{ search_form.search_string(placeholder="Search") }}
-                {{ search_form.submit(id="search-submit", value="Search") }}
+            <form action="{{ url_for('search') }}" name="search-form">
+                <input name="search_query" id="search-box" type="text" placeholder="Search" value="{{ search_query }}"/>
+                <button id="search-button">Search</input>
             </form>
         </div>
         <div class="topnav-right">
@@ -41,7 +40,7 @@
         {% if current_user.is_authenticated %}
         <a href="javascript:void(0)">My Profile</a>
         <a href="{{ url_for('upload') }}">Upload Video</a>
-        <a href="javascript:void(0)">Library</a>
+        <a href="{{ url_for('user_library') }}">Library</a>
         {% endif %}
         {# <a href="javascript:void(0)">Help</a> #}
     </div>
