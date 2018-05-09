@@ -59,9 +59,3 @@ class UploadVideoForm(FlaskForm):
         ]
     )
     submit = wtf.SubmitField('submit')
-
-class SearchForm(FlaskForm):
-    search_string = wtf.StringField('search_string',
-        validators=[wtf.validators.DataRequired()]
-    )
-    submit = wtf.SubmitField('submit')
