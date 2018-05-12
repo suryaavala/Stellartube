@@ -10,10 +10,10 @@ db_dbName = 'DB_DApp2'
 #Function used to connect to DB
 #Parameters: 
 def sql_StartSQLConnection(hostname, username, password, dbName):    
-    print("Connecting to database server...")
+#    print("Connecting to database server...")
     try:
         conn = mdb.connect(hostname, username, password, dbName)
-        print("Successfully connected to database %s!" %dbName)
+#        print("Successfully connected to database %s!" %dbName)
         return conn
     except Exception as error:
         print("Exception:%s" %error)
@@ -30,7 +30,7 @@ def sql_InitialDB(hostname, username, password, dbName):
         conn = mdb.connect(hostname, username, password, dbName)
         sql_CreateTable(conn)
         sql_Close(conn)
-        print("Successfully Initialed")
+#        print("Successfully Initialed")
     except Exception as error:
         print("Exception: %s" %error)
    
@@ -47,7 +47,7 @@ def sql_CreateTable(conn):
         cursor.execute('CREATE TABLE IF NOT EXISTS Table_Lable (VideoID int, Lable varchar(50), primary key(Lable, VideoID))')
         cursor.execute('CREATE TABLE IF NOT EXISTS Table_Comments (CommentID int primary key AUTO_INCREMENT, VideoID int, DatePosted Date, ParentID int, Content varchar(500))')
         cursor.execute('Alter table Table_Comments AUTO_INCREMENT=1')
-        print("Create tables successfully!")
+#        print("Create tables successfully!")
     except Exception as error:
         print("Exception:%s" %error)
 
@@ -66,7 +66,7 @@ def sql_Insert(sql):
     try:
         count = cursor.execute(sql)
         sql_Close(conn)
-        print("Insert successfully!")
+#        print("Insert successfully!")
         return count
     except Exception as error:
         print("Exception: %s" %error)
@@ -78,7 +78,7 @@ def sql_Close(conn):
         cursor.close()
         conn.commit()
         conn.close()
-        print("Disconnected successfuly")
+#        print("Disconnected successfuly")
     except Exception as error:
         print("Exception:%s" %error)
 
@@ -138,8 +138,9 @@ def sql_getVideo(videoID):
     else:
         return None
 
-def sql_GetVideoIDByVideoName(videoname):
-    return sql_Select("SELECT VideoID FROM Table_Video WHERE VideoName = \'%s\'" %videoname)
+def sql_getUserVideos(userID):
+    result = sql_Select("SELECT VideoID FROM Table_Videos WHERE Owner = '%s'" % userID)
+    return [i[0] for i in result] if result else []
 
 def sql_GetVideoNameByLable(lable):
     return sql_Select("SELECT VideoName FROM Table_Video WHERE VideoID = (SELECT VideoID FROM Table_Lable WHERE Lable = \'%s\')" %lable)
@@ -149,9 +150,6 @@ def sql_getUserPurchases(userID):
 
 def sql_GetVideosNameByUserID(userID):
     return sql_Select("SELECT VideoName FROM Table_Video WHERE VideoID = (SELECT VideoID FROM Table_User_Video WHERE UserID = \'%d\')" %userID)
-
-def sql_GetUserIDByUsername(username):
-    return sql_Select("SELECT UserID FROM Table_UserInfo WHERE Username = \'%s\'" %username)
 
 def sql_GetVideoNameByLike(name):
     args = '%'+name+'%'

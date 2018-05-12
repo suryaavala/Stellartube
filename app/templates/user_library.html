@@ -1,9 +1,9 @@
 {% extends "base_nav.html" %}
-{% block title %}Search{% endblock %}
+{% block title %}Library{% endblock %}
 {% block body %}
     <div id="main">
         <div id="video-tile-container">
-            <h1>Search Results for &quot;{{ search_query }}&quot;</h1>
+            <h1>Library</h1>
             {% for video in videos %}
             <div class="video-tile">
                 <a href="{{ url_for('watch_video', video_id=video.id) }}">
