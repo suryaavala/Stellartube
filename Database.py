@@ -3,16 +3,16 @@ import time
 import datetime
 
 db_hostname = 'localhost'
-db_username = 'root'
-db_passwords = 'Czz15133613611'
+db_email = 'admin'
+db_passwords = 'password'
 db_dbName = 'DB_DApp'
 
 #Function used to connect to DB
 #Parameters: 
-def sql_StartSQLConnection(hostname, username, password, dbName):    
+def sql_StartSQLConnection(hostname, email, password, dbName):    
     print("Connecting to database server...")
     try:
-        conn = mdb.connect(hostname, username, password, dbName)
+        conn = mdb.connect(hostname, email, password, dbName)
         print("Successfully connected to database %s!" %dbName)
         return conn
     except Exception as error:
@@ -20,14 +20,14 @@ def sql_StartSQLConnection(hostname, username, password, dbName):
         return
 
 #Initialize Data base
-def sql_InitialDB(hostname, username, password, dbName):
+def sql_InitialDB(hostname, email, password, dbName):
     print("Initialing Database...:")
     try:
-        conn = mdb.connect(hostname, username, password)
+        conn = mdb.connect(hostname, email, password)
         cursor = conn.cursor()
         #cursor.execute('DROP DATABASE IF EXISTS %s' %dbName)
         cursor.execute('CREATE DATABASE IF NOT EXISTS %s' %dbName)
-        conn = mdb.connect(hostname, username, password, dbName)
+        conn = mdb.connect(hostname, email, password, dbName)
         sql_CreateTable(conn)
         sql_Close(conn)
         print("Successfully Initialed")
@@ -55,8 +55,8 @@ def sql_GetConnection():
     global db_dbName
     global db_hostname
     global db_passwords
-    global db_username
-    conn = sql_StartSQLConnection(db_hostname, db_username, db_passwords, db_dbName)
+    global db_email
+    conn = sql_StartSQLConnection(db_hostname, db_email, db_passwords, db_dbName)
     return conn
 
 #insert data into DB
@@ -104,70 +104,144 @@ def sql_Update(sql):
         print("Exception: %s" %error)
     
 #get video's lables by video name
-def sql_GetLableByVideoName(videoname):    
-    return sql_Select("SELECT Lable FROM Table_Lable WHERE VideoID = (SELECT VideoID FROM Table_Video WHERE VideoName = \'%s\')" %videoname)
+def sql_GetLableByTitle(title):
+    try:
+        results = sql_Select("SELECT Lable FROM Table_Lable WHERE VideoID = (SELECT VideoID FROM Table_Video WHERE VideoName = \'%s\')" %title)
+        return results[0][0]
+    except Exception as identifier:
+        print("Exception: %s" %identifier)
 
-#Using username get password
+#Using email get password
 def sql_checkUserPassword(userID, password):
-    pws = sql_Select("SELECT Password FROM Table_Users WHERE UserID = \'%s\'" %userID)
-    pw = pws[0]    
-    if password == pw[0]:
-        return True
-    else:
-        return False
+    try:
+        pws = sql_Select("SELECT Password FROM Table_Users WHERE UserID = \'%s\'" %userID)
+        pw = pws[0]    
+        if password == pw[0]:
+            return True
+        else:
+            return False
+    except Exception as identifier:
+        print("Exception: %s" %identifier)
 
 def sql_getUser(userID):
-    return sql_Select("SELECT Email, FirstName, LastName FROM Table_Users WHERE UserID = \'%s\'" %userID)
+    try:
+        result = sql_Select("SELECT Email, FirstName, LastName FROM Table_Users WHERE UserID = \'%s\'" %userID)
+        return result[0]
+    except Exception as identifier:
+        print("Exception: %s" %identifier)
 
 def sql_getVideo(videoID):
-    return sql_Select("SELECT Owner, DateAdded, Title, Description, Price, FileName FROM Table_Videos WHERE VideoID = \'%d\'" %videoID)
+    try:
+        result = sql_Select("SELECT Owner, DateAdded, Title, Description, Price, FileName, Lables FROM Table_Videos WHERE VideoID = \'%d\'" %videoID)
+        return result[0]
+    except Exception as identifier:
+        print("Exception: %s" %identifier)
 
-def sql_GetVideoIDByVideoName(videoname):
-    return sql_Select("SELECT VideoID FROM Table_Video WHERE VideoName = \'%s\'" %videoname)
+def sql_getVideoIDByVideoName(title):
+    try:
+        result = sql_Select("SELECT VideoID FROM Table_Videos WHERE Title = \'%s\'" %title)
+        return result[0][0]
+    except Exception as identifier:
+        print("Exception: %s" %identifier)
 
-def sql_GetVideoNameByLable(lable):
-    return sql_Select("SELECT VideoName FROM Table_Video WHERE VideoID = (SELECT VideoID FROM Table_Lable WHERE Lable = \'%s\')" %lable)
+def sql_getVideoNameByLable(lable):
+    result = []
+    args = '%'+lable+'%'
+    results = sql_Select("SELECT Title FROM Table_Videos WHERE Lables LIKE'%s'" %args)
+    for e in results:
+        result.append(e[0])
+    return result
 
 def sql_getUserPurchases(userID):
-    return sql_Select("SELECT VideoID FROM Table_Purchases WHERE UserID = \'%d\'" %userID)
+    result = []
+    results = sql_Select("SELECT VideoID FROM Table_Purchases WHERE UserID = \'%d\'" %userID)
+    for e in results:
+        result.append(e[0])
+    return result
 
-def sql_GetVideosNameByUserID(userID):
-    return sql_Select("SELECT VideoName FROM Table_Video WHERE VideoID = (SELECT VideoID FROM Table_User_Video WHERE UserID = \'%d\')" %userID)
+def sql_getTitleByUserID(userID):
+    result = []
+    results = sql_Select("SELECT Title FROM Table_Videos WHERE VideoID = (SELECT VideoID FROM Table_Purchases WHERE UserID = \'%d\')" %userID)
+    for e in results:
+        result.append(e[0])
+    return result
 
-def sql_GetUserIDByUsername(username):
-    return sql_Select("SELECT UserID FROM Table_UserInfo WHERE Username = \'%s\'" %username)
+def sql_getUserIDByEmail(email):
+    try:        
+        result = sql_Select("SELECT UserID FROM Table_Users WHERE Email = \'%s\'" %email)
+        return result[0][0]
+    except Exception as identifier:
+        print("Exception: %s" %identifier)
 
-def sql_GetVideoNameByLike(name):
-    args = '%'+name+'%'
-    return sql_Select("SELECT VideoName FROM Table_Video WHERE VideoName LIKE '%s'" %args)
+def sql_getTitleByLike(title):
+    output = []
+    args = '%'+title+'%'
+    results = sql_Select("SELECT Title FROM Table_Videos WHERE Title LIKE '%s'" %args)
+    for e in results:
+        output.append(e[0])
+    return output
+
+def sql_getFileNameByTitle(title):
+    try:
+        output = []
+        args = '%'+title+'%'
+        results = sql_Select("SELECT FileName FROM Table_Videos WHERE Title LIKE '%s'" %args)
+        for e in results:
+            output.append(e[0])
+        return output
+    except Exception as identifier:
+        print("Exception: %s" %identifier)
+
 
 def sql_searchVideos(searchString, maxResults):
-    args = '%'+searchString+'%'
-    ls_video = []
-    results = sql_Select("SELECT VideoID FROM Table_Videos WHERE Title LIKE '%s" %args)
-    ls_video.append(results)
-    results = sql_Select("SELECT VideoID FROM Table_Videos WHERE Description LIKE '%s" %args)
-    ls_video.append(results)
-    if len(ls_video)>maxResults:
-        return ls_video[:maxResults]
-    else:
-        return ls_video
+    try:
+        args = '%'+searchString+'%'
+        ls_video = []
+        results = sql_Select("SELECT VideoID FROM Table_Videos WHERE Title LIKE '%s'" %args)
+        for e in results:
+            ls_video.append(e[0])
+        results = sql_Select("SELECT VideoID FROM Table_Videos WHERE Description LIKE '%s'" %args)
+        for e in results:
+            if e[0] not in ls_video:
+                ls_video.append(e[0])
+        if len(ls_video) == 0:
+            return False
+        if len(ls_video)>maxResults:
+            return ls_video[:maxResults]
+        else:
+            return ls_video
+    except Exception as identifier:
+        print("Exception: %s" %identifier)
     
-def sql_getVideoComments(videoID):    
-    results = sql_Select("SELECT Content FROM Table_Comments WHERE VideoID = \'%s\'" %videoID)
-    return results
+#get video comments by videoID
+def sql_getVideoComments(videoID):
+    try:
+        comments = []  
+        results = sql_Select("SELECT Content FROM Table_Comments WHERE VideoID = \'%s\'" %videoID)
+        for e in results:
+            comments.append(e[0])
+        return comments
+    except Exception as identifier:
+        print("Exception: %s" %identifier)
+    
 
+#get comments by commentID
 def sql_getComments(commentID):
-    results = sql_Select("SELECT DatePosted, ParentID, Content FROM Table_Comments WHERE CommentID = \'%s\'" %commentID)
-    return results
-
+    try:
+        results = sql_Select("SELECT DatePosted, ParentID, Content FROM Table_Comments WHERE CommentID = \'%s\'" %commentID)
+        return results[0]
+    except Exception as identifier:
+        print("Exception: %s" %identifier)
+    
+#Check if video purchased
 def checkVideoPurchase(videoID, userID):
-    result = sql_Select("SELECT Date FROM Table_Purchase WHERE VideoID = \'%s\' UserID = \'%s\'" %(videoID, userID))
+    result = sql_Select("SELECT Date FROM Table_Purchases WHERE VideoID = \'%d\' and UserID = \'%d\'" %(videoID, userID))
     if len(result) > 0:
         return True
     else:
         return False
 
+#add new purchases
 def sql_addPurchase(videoID, userID):
     date = datetime.datetime.now().strftime("%Y-%m-%d")
     count = sql_Insert("INSERT INTO Table_Purchases values(\'%d\', \'%d\', \'%s\')" %(videoID, userID, date))
@@ -176,6 +250,7 @@ def sql_addPurchase(videoID, userID):
     else:
         return 1
 
+#add comments
 def sql_addComment(videoID, parentsID, content):
     date = datetime.datetime.now().strftime("%Y-%m-%d")
     count =  sql_Insert("INSERT INTO Table_Comments values(null, \'%d\', \'%s\', \'%d\', \'%s\')" %(videoID, date, parentsID, content))
@@ -184,6 +259,7 @@ def sql_addComment(videoID, parentsID, content):
     else:
         return 1
 
+#add new user
 def sql_addUser(email, password, firstname, lastname):    
     count = sql_Insert("INSERT INTO Table_Users values(null, \'%s\', \'%s\', \'%s\', \'%s\')" %(email, password, firstname, lastname))
     if count == 1:
@@ -191,6 +267,7 @@ def sql_addUser(email, password, firstname, lastname):
     else:
         return 1
 
+#add video 
 def sql_addVideo(userID, title, decription, price, file, lable):
     date = datetime.datetime.now().strftime("%Y-%m-%d")
     count = sql_Insert("INSERT INTO Table_Videos values(null, \'%d\', \'%s\', \'%s\', \'%s\', \'%f\', \'%s\', \'%s\')" %(userID, date, title, decription, price, file, lable))
@@ -199,6 +276,7 @@ def sql_addVideo(userID, title, decription, price, file, lable):
     else:
         return 1
 
+#re-edit user  email
 def sql_editUserEmail(userID, newEmail):
     result = sql_Update("UPDATE Table_Users SET Email = \'%s\' WHERE UserID = \'%d\'" %(newEmail, userID))
     if result == 1:
@@ -206,6 +284,7 @@ def sql_editUserEmail(userID, newEmail):
     else:
         return 1
 
+#re-edit user password
 def sql_editUserPassword(userID, newPassword):
     result = sql_Update("UPDATE Table_Users SET Password = \'%s\' WHERE UserID = \'%d\'" %(newPassword, userID))
     if result == 1:
@@ -213,6 +292,7 @@ def sql_editUserPassword(userID, newPassword):
     else:
         return 1
 
+#re-edit Video information
 def sql_editVideoInfo(videoID, newTitle, newDescription, newLables):
     sql = "UPDATE Table_Videos SET "
     try:
@@ -221,20 +301,30 @@ def sql_editVideoInfo(videoID, newTitle, newDescription, newLables):
         if newDescription != '':
             sql_Update(sql + "Description = \'%s\' WHERE VideoID = \'%d\'" %(newDescription, videoID))
         if newLables != '':
-            sql_Update(sql + "Lable = \'%s\' WHERE VideoID = \'%d\'" %(newLables, videoID))
+            sql_Update(sql + "Lables = \'%s\' WHERE VideoID = \'%d\'" %(newLables, videoID))
         return 0
     except Exception as error:
         print("Exception: %s" %error)
         return 1
 
-def sql_InsertVideosLable(videoname, lable):
-    sql_Insert("INSERT INTO Table_Lable values( (SELECT VideoID FROM Table_Video WHERE VideoName = \'%s\'), \'%s\')" %(videoname, lable))
-    
+#add lable to exist video
+def sql_addVideosLable(videoID, lable):
+    try:
+        lables = ""
+        results = sql_Select("SELECT Lables FROM Table_Videos WHERE VideoID = \'%d\'" %videoID)
+        lables = results[0][0]        
+        if lable not in lables.split(','):
+            lables = lables + ','+lable        
+        return sql_editVideoInfo(1,'','',lables)         
+    except Exception as identifier:
+        return 1
+     
+#check user exist
 def sql_doesUserExist(email):
     conn = sql_GetConnection()
     cursor = conn.cursor()
     try:
-        cursor.execute("SELECT * FROM Table_UserInfo WHERE Username = \'%s\'" %email)
+        cursor.execute("SELECT * FROM Table_UserInfo WHERE email = \'%s\'" %email)
         result = cursor.fetchall()
         return result
     except Exception as error:
@@ -243,4 +333,5 @@ def sql_doesUserExist(email):
 
 
 #Initialize Database
-sql_InitialDB(db_hostname, db_username, db_passwords, db_dbName)
+if __name__ == '__main__':
+    sql_InitialDB(db_hostname, db_email, db_passwords, db_dbName)
