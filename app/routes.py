@@ -126,8 +126,8 @@ def download(video_id):
     if video:
         vfilename = video[5]
         vdir = os.path.join(app.root_path, 'static/videos')
-        print(vdir)
-        return send_from_directory(directory=vdir, filename=vfilename)
+        return send_from_directory(directory=vdir, filename=vfilename,
+            as_attachment=True)
     else:
         return redirect(url_for('index'))
 
@@ -153,6 +153,32 @@ def user_library():
     video_purchases = getVideosFromList(purchases_v_ids)
     return render_template('user_library.html', video_uploads=video_uploads,
         video_purchases=video_purchases)
+
+
+# Purchase Confirmation page
+#
+# Page loaded into an iframe that prompts the user to confirm their
+# their purchase
+@app.route('/buy/<int:video_id>', methods=['get', 'post'])
+@fl.login_required
+def buy_content(video_id):
+
+    vid = db.sql_getVideo(video_id)
+    vid_owner = db.sql_getUser(vid[0])
+
+    if request.method == "POST":
+        if "confirm_buy" in request.args:
+            # Insert code here to process transaction
+            pass
+
+        return redirect(url_for("watch_video", video_id=video_id))
+
+    return render_template("transaction_page.html",
+        video_thumbnail=url_for('static', filename='images/blockmart_logo.svg'),
+        video_title=vid[2],
+        video_owner=vid_owner[0],
+        video_price=vid[4])
+
 
 # Helper Functions
 

@@ -35,7 +35,20 @@
                 {% if videoPrice == 0 or videoIsPublic or videoIsPurchased or videoIsOwned %}
                 <a href="{{ url_for('download', video_id=video_id) }}">Download</a>
                 {% else %}
-                <a href="javascript:void(0)">Buy Now</a>
+                <a href="javascript:void(0)" onclick="openBuyPrompt()">Buy Now</a>
+                <script>
+                    function openBuyPrompt() {
+                        var ifrm = document.createElement("iframe");
+                        ifrm.setAttribute("src", "{{ url_for('buy_content', video_id=video_id) }}");
+                        ifrm.style.width = "640px";
+                        ifrm.style.height = "480px";
+                        document.body.appendChild(ifrm);
+                    }
+                    function closeBuyPrompt() {
+                        var ifrm = document.getElementById("trans-prompt-frame");
+                        ifrm.parentNode.removeChild(ifrm);
+                    }
+                </script>
                 {% endif %}
             </div>
         </div>
