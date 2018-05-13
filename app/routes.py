@@ -147,9 +147,12 @@ def search():
 @app.route('/mylibrary', methods=['get', 'post'])
 @fl.login_required
 def user_library():
-    v_ids = db.sql_getUserVideos(fl.current_user.id)
-    videos = getVideosFromList(v_ids)
-    return render_template('user_library.html', videos=videos)
+    uploads_v_ids = db.sql_getUserVideos(fl.current_user.id)
+    video_uploads = getVideosFromList(uploads_v_ids)
+    purchases_v_ids = [] # Replace with function that returns list of purchased video IDs
+    video_purchases = getVideosFromList(purchases_v_ids)
+    return render_template('user_library.html', video_uploads=video_uploads,
+        video_purchases=video_purchases)
 
 # Helper Functions
 
