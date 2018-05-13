@@ -1,0 +1,21 @@
+{% extends base.html %}
+{% title %}Buy {{ video_title }}{% endblock %}
+{% body %}
+    <div id="trans-prompt">
+        <div id="trans-prompt-header">
+            <div id="tp-video-thumnail">
+            </div>
+            <div id="tp-video-title">{{ video_title }}</div>
+            <div id="tp-video-owner">{{ video_owner }}</div>
+            <div id="tp-video-price">{{ video_price }}</div>
+        </div>
+        <div id="trans-prompt-footer">
+            <div id="trans-prompt-form">
+                <form name="confirm_purchase" method="POST">
+                    <button id="tp-button-cancel">Cancel</button>
+                    <button id="tp-button-continue">Continue</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
