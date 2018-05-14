@@ -29,7 +29,7 @@ def sql_InitialDB(hostname, username, password, dbName):
     try:
         conn = mdb.connect(hostname, username, password)
         cursor = conn.cursor()
-        #cursor.execute('DROP DATABASE IF EXISTS %s' %dbName)
+        cursor.execute('DROP DATABASE IF EXISTS %s' %dbName)
         cursor.execute('CREATE DATABASE IF NOT EXISTS %s' %dbName)
         conn = mdb.connect(hostname, username, password, dbName)
         sql_CreateTable(conn)

@@ -5,6 +5,8 @@ from stellar_base.utils import StellarMnemonic
 from stellar_base.keypair import Keypair
 # requests to interact with stellar blockchain
 import requests
+from stellar_base.builder import Builder
+from stellar_base.address import Address
 
 
 class Stellar_block():
@@ -42,10 +44,31 @@ class Stellar_block():
     def get_passphrase(self):
         return self.mnemonic_secret
 
+    def get_pubkey(self):
+        return self._generate_keypair().address().decode()
+
     def _generate_keypair(self):
         if self.mnemonic_secret:
             kp = Keypair.deterministic(self.mnemonic_secret)
         return kp
+
+    def transfer(self, amount, to_address):
+        seed = self.get_seed()
+        builder = Builder(secret=seed)
+        # builder = Builder(secret=seed, network='public') for LIVENET
+        builder.append_payment_op(to_address, amount, 'XLM')
+        builder.add_text_memo('For video')  # string length <= 28 bytes
+        builder.sign()
+
+        # Uses an internal horizon instance to submit over the network
+        builder.submit()
+        return
+
+    def _get_balance(self):
+        address = Address(address=self._generate_keypair().address().decode())
+        address.get()  # get the updated information
+
+        return address.balances[0]['balance']
 
 
 if __name__ == '__main__':

@@ -8,7 +8,10 @@ from app import database as db
 from werkzeug.utils import secure_filename
 import flask_login as fl
 import os
-from stellar_block import Stellar_block
+from app.stellar_block import Stellar_block
+
+import sys
+sys.path.append('./app')
 
 # Specify login view for login manager
 lm.lm.login_view = 'signin'
@@ -28,6 +31,8 @@ def index():
 # Sign In Page
 # Page allows users to sign into their account if they have one, or go to the
 # sign up page, and request their password if they have forgetten it
+
+
 @app.route('/signin', methods=['get', 'post'])
 def signin():
     signinform = frm.SignInForm()
@@ -81,18 +86,18 @@ def signup():
 @app.route('/watch/<int:video_id>', methods=['get', 'post'])
 def watch_video(video_id):
     video = db.sql_getVideo(video_id)
-    
+
     return render_template(
         'view_video.html',
         video_id=video_id,
         video_name=video[2],
         video_desc=video[3],
-        video_path=url_for('static', filename='videos/%s'%video[5]),
-        videoPrice = video[4],
-        videoIsPublic = True if float(video[4]) == 0 else False,
-        videoIsOwned = True if fl.current_user.is_authenticated and 
-            str(fl.current_user.id) == str(video[0]) else False,
-        videoIsPurchased = False)
+        video_path=url_for('static', filename='videos/%s' % video[5]),
+        videoPrice=video[4],
+        videoIsPublic=True if float(video[4]) == 0 else False,
+        videoIsOwned=True if fl.current_user.is_authenticated and
+        str(fl.current_user.id) == str(video[0]) else False,
+        videoIsPurchased=False)
 
 
 @app.route('/logout', methods=['get', 'post'])
@@ -100,6 +105,7 @@ def watch_video(video_id):
 def logout():
     fl.logout_user()
     return redirect(url_for('index'))
+
 
 @app.route('/upload', methods=['get', 'post'])
 @fl.login_required
@@ -117,12 +123,13 @@ def upload():
         vfile.save(vfilepath)
 
         hasUploaded = db.sql_addVideo(int(fl.current_user.id), vtitle, vdescription,
-            vprice, vfilename, vlabels)
-        
+                                      vprice, vfilename, vlabels)
+
         if not hasUploaded:
             return redirect(url_for('index'))
 
     return render_template('upload_video.html', form=uploadform)
+
 
 @app.route('/download/<int:video_id>', methods=['get', 'post'])
 def download(video_id):
@@ -131,9 +138,10 @@ def download(video_id):
         vfilename = video[5]
         vdir = os.path.join(app.root_path, 'static/videos')
         return send_from_directory(directory=vdir, filename=vfilename,
-            as_attachment=True)
+                                   as_attachment=True)
     else:
         return redirect(url_for('index'))
+
 
 @app.route('/search', methods=['get'])
 def search():
@@ -144,19 +152,20 @@ def search():
             videos = getVideosFromList(v_ids)
 
             return render_template('search_results.html', videos=videos,
-                search_query=search_query)
+                                   search_query=search_query)
 
     return redirect(url_for('index'))
+
 
 @app.route('/mylibrary', methods=['get', 'post'])
 @fl.login_required
 def user_library():
     uploads_v_ids = db.sql_getUserVideos(fl.current_user.id)
     video_uploads = getVideosFromList(uploads_v_ids)
-    purchases_v_ids = [] # Replace with function that returns list of purchased video IDs
+    purchases_v_ids = []  # Replace with function that returns list of purchased video IDs
     video_purchases = getVideosFromList(purchases_v_ids)
     return render_template('user_library.html', video_uploads=video_uploads,
-        video_purchases=video_purchases)
+                           video_purchases=video_purchases)
 
 
 # Purchase Confirmation page
@@ -178,10 +187,11 @@ def buy_content(video_id):
         return redirect(url_for("watch_video", video_id=video_id))
 
     return render_template("transaction_page.html",
-        video_thumbnail=url_for('static', filename='images/blockmart_logo.svg'),
-        video_title=vid[2],
-        video_owner=vid_owner[0],
-        video_price=vid[4])
+                           video_thumbnail=url_for(
+                               'static', filename='images/blockmart_logo.svg'),
+                           video_title=vid[2],
+                           video_owner=vid_owner[0],
+                           video_price=vid[4])
 
 
 # Helper Functions
@@ -193,8 +203,8 @@ def getVideosFromList(v_ids):
     for v in v_ids:
         vi = db.sql_getVideo(v)
         videos.append(mdl.videoInfo(v, int(vi[0]),
-            vi[1], vi[2], vi[3], vi[4], 'uploads/'+vi[5], 
-            url_for('static', filename='images/blockmart_logo.svg'))
-        )
+                                    vi[1], vi[2], vi[3], vi[4], 'uploads/'+vi[5],
+                                    url_for('static', filename='images/blockmart_logo.svg'))
+                      )
 
     return videos
