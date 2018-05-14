@@ -156,6 +156,10 @@ def sql_getUser(userID):
     return sql_Select("SELECT Email, FirstName, LastName FROM Table_Users WHERE UserID = \'%s\'" % userID)[0]
 
 
+def sql_getAllUserInfo(userID):
+    return sql_Select("SELECT Email, FirstName, LastName, PassPhrase, Balance FROM Table_Users WHERE UserID = \'%s\'" % userID)[0]
+
+
 def sql_getVideo(videoID):
     result = sql_Select(
         "SELECT Owner, DateAdded, Title, Description, Price, FileName FROM Table_Videos WHERE VideoID = \'%d\'" % videoID)
@@ -276,6 +280,15 @@ def sql_editUserEmail(userID, newEmail):
 def sql_editUserPassword(userID, newPassword):
     result = sql_Update(
         "UPDATE Table_Users SET Password = \'%s\' WHERE UserID = \'%d\'" % (newPassword, userID))
+    if result == 1:
+        return 0
+    else:
+        return 1
+
+
+def sql_editUserBalance(userID, newBalance):
+    result = sql_Update(
+        "UPDATE Table_Users SET Balance = \'%f\' WHERE UserID = \'%d\'" % (float(newBalance), int(userID)))
     if result == 1:
         return 0
     else:

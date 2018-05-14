@@ -52,17 +52,22 @@ class Stellar_block():
             kp = Keypair.deterministic(self.mnemonic_secret)
         return kp
 
-    def transfer(self, amount, to_address, video_id):
+    def transfer(self, amount, to_address, description):
+        '''
+
+        '''
+        if float(self._get_balance()) < float(amount):
+            return 'Insufficient Balance'
         seed = self.get_seed()
         builder = Builder(secret=seed)
         # builder = Builder(secret=seed, network='public') for LIVENET
         builder.append_payment_op(to_address, amount, 'XLM')
-        builder.add_text_memo('For video')  # string length <= 28 bytes
+        builder.add_text_memo(description)  # string length <= 28 bytes
         builder.sign()
 
         # Uses an internal horizon instance to submit over the network
         builder.submit()
-        return
+        return 'SUCCESS'
 
     def _get_balance(self):
         address = Address(address=self._generate_keypair().address().decode())

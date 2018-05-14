@@ -186,7 +186,24 @@ def buy_content(video_id):
     if request.method == "POST":
 
         if "confirm_buy" in list(request.form.keys()):
-            pass
+            video_price = vid[4]
+            owner_passphrase = db.sql_getAllUserInfo(vid[0])[3]
+            buyer_passphrase = db.sql_getAllUserInfo(
+                fl.current_user.get_id())[3]
+            memo = '{}bought{}'.format(fl.current_user.get_id(), video_id)
+
+            owner = Stellar_block(owner_passphrase)
+            buyer = Stellar_block(buyer_passphrase)
+
+            result = buyer.transfer(video_price, owner.get_pubkey(), memo)
+            if result == 'SUCCESS':
+                print('Successfully bought video')
+            else:
+                print(result)
+
+            db.sql_editUserBalance(vid[0], owner._get_balance())
+            db.sql_editUserBalance(
+                fl.current_user.get_id(), buyer._get_balance())
 
         return redirect(url_for("watch_video", video_id=video_id))
 
