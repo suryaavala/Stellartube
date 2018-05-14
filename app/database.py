@@ -309,3 +309,24 @@ def sql_InsertVideosLable(videoname, lable):
 # Initialize Database
 if __name__ == "__main__":
     sql_InitialDB(db_hostname, db_username, db_passwords, db_dbName)
+
+    # NOTE: Creating an admin app user for blockchain transaction validation
+    from app.stellar_block import Stellar_block
+
+    def initialise_admin_user():
+        fname = 'app'
+        lname = 'admin'
+        email = 'suryatherisingstar@gmail.com'
+        password = '%3oYbcQe4kq1&WN4'
+        # NOTE: Blockchain user creation
+        user_on_blockchain = Stellar_block()
+        user_on_blockchain.create_account()
+        passphrase = user_on_blockchain.get_passphrase()
+        balance = float(user_on_blockchain._get_balance())
+        try:
+            sql_addUser(email, password, fname, lname, passphrase, balance)
+            print('App admin created')
+        except Exception:
+            print('Unable to create app admin')
+
+    initialise_admin_user()
