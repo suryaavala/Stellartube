@@ -68,11 +68,16 @@ def signup():
         lname = signupform.last_name.data
         email = signupform.email.data
         password = signupform.password.data
+        # NOTE: Blockchain user creation
+        user_on_blockchain = Stellar_block()
+        user_on_blockchain.create_account()
+        passphrase = user_on_blockchain.get_passphrase()
+        balance = float(user_on_blockchain._get_balance())
 
         if db.sql_doesUserExist(email):
             flash("Email already in use")
         else:
-            if not db.sql_addUser(email, password, fname, lname):
+            if not db.sql_addUser(email, password, fname, lname, passphrase, balance):
                 user = lm.User(str(db.sql_doesUserExist(email)))
                 fl.login_user(user)
                 flash('User successful created and logged in')
