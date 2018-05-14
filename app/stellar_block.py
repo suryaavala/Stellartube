@@ -73,8 +73,10 @@ class Stellar_block():
     def _get_data(self):
         address = Address(address=self._generate_keypair().address().decode())
         address.get()  # get the updated information
-
         return address.data
+
+    def _string_lenght_bytes(self, s):
+        return len(s.encode('utf-8'))
 
 
 if __name__ == '__main__':
