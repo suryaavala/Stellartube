@@ -80,6 +80,11 @@ class Stellar_block():
         address.get()  # get the updated information
         return address.data
 
+    def _get_transactions(self):
+        address = Address(address=self._generate_keypair().address().decode())
+        address.get()  # get the updated information
+        return address.transactions()
+
     def _string_lenght_bytes(self, s):
         return len(s.encode('utf-8'))
 
