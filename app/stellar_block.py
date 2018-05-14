@@ -52,7 +52,7 @@ class Stellar_block():
             kp = Keypair.deterministic(self.mnemonic_secret)
         return kp
 
-    def transfer(self, amount, to_address):
+    def transfer(self, amount, to_address, video_id):
         seed = self.get_seed()
         builder = Builder(secret=seed)
         # builder = Builder(secret=seed, network='public') for LIVENET
@@ -69,6 +69,12 @@ class Stellar_block():
         address.get()  # get the updated information
 
         return address.balances[0]['balance']
+
+    def _get_data(self):
+        address = Address(address=self._generate_keypair().address().decode())
+        address.get()  # get the updated information
+
+        return address.data
 
 
 if __name__ == '__main__':
