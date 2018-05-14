@@ -10,7 +10,7 @@
     </div>
     <div id="trans-prompt-footer">
         <div id="trans-prompt-form">
-            <form name="confirm_purchase" method="POST">
+            <form name="confirm_purchase" action="{{ url_for('buy_content', video_id=video_id) }}" method="POST">
                 <button id="tp-button-cancel" onclick="closeBuyPrompt()">Cancel</button>
                 <button id="tp-button-continue" name="confirm_buy" type="submit">Continue</button>
             </form>

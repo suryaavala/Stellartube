@@ -180,13 +180,12 @@ def user_library():
 @app.route('/buy/<int:video_id>', methods=['get', 'post'])
 @fl.login_required
 def buy_content(video_id):
-
     vid = db.sql_getVideo(video_id)
     vid_owner = db.sql_getUser(vid[0])
 
     if request.method == "POST":
-        if "confirm_buy" in request.args:
-            # Insert code here to process transaction
+
+        if "confirm_buy" in list(request.form.keys()):
             pass
 
         return redirect(url_for("watch_video", video_id=video_id))
@@ -196,7 +195,8 @@ def buy_content(video_id):
                                'static', filename='images/blockmart_logo.svg'),
                            video_title=vid[2],
                            video_owner=vid_owner[0],
-                           video_price=vid[4])
+                           video_price=vid[4],
+                           video_id=video_id)
 
 
 # Helper Functions
