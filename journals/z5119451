@@ -21,12 +21,41 @@ This meeting reaches agreement on the following issues:
 4. Yunhe should develop a database for this project which have to support the information for digital currency transaction.
 
 week 5
+Meeting Topic: Tracking the processing of each part
+This meeting reaches agreement on the following issues:
+1. The structure of database has been identified and on processing. All tables and libs associated with databse should be finished and tested.
+2. The websit has been initialized and many sample function has been estibalished. 
+
 week 6
+Meeting Topic: Integrate all part so far and show the 1st stage demo. 
+This meeting reaches agreement ont the following issues:
+1. Libs of database should be refine to more friendly for websit to use. 
+2. Video can be show and preview online 
+3. Blockchain part still on going 
+
 week 7
+Meeting Topic: Tracking the processing of each part.
+This meeting reaches agreement on the follow issues:
+1. Libs of database has been refined and can be easily used by call the API without connect to database by user.
+2. More function has been added into database lib which made it more convinence to collect data.
+
 week 8
+Meeting Topic: Integrate all part so far and show the 2nd stage demo.
+This meeting reaches agreement on the following issues:
+1. The function that have been achieved so far should be show as a demo.
+2. New tables are required to storage commits and pruchases.
+3. Blockchain lib is on processing and many sample functions have been finished.
+
 week 9
 Meeting Topic: Provide more idea on project
 This meeting reach agreement on the following issues:
 1. The database and related function should be modified and edited more friendly.
 2. Many other functions should be added to websit.
 3. Blockchain part should be merge with websit and complete transaction
+
+week 10
+Meeting Topic: Integrate all part so far and show the 3th stage demo
+This meeting reaches agreement on the following issues:
+1. New tables of database have been formed and new funtions in the lib werefinished.
+2. Many bugs happend in the database lib, these functions are required to be tested again.
+3. Blockchain part has been finished and waiting for combin with front end.
