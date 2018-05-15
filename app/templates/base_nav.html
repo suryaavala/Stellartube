@@ -11,10 +11,14 @@
                 <img src="{{ url_for('static', filename='images/blockmart_logo.svg') }}"/>
             </a>
         </div>
-        <div id="topnav-search" class="nav-element">
+        <div id="topnav-search">
             <form action="{{ url_for('search') }}" name="search-form">
-                <input name="search_query" id="search-box" type="text" placeholder="Search" value="{{ search_query }}"/>
-                <button id="search-button">Search</button>
+                <div id="topnav-search-query" class="nav-element">
+                    <input name="search_query" id="search-box" type="text" placeholder="Search" value="{{ search_query }}"/>
+                </div>
+                <div id="topnav-search-button" class="nav-element">
+                    <button id="search-button">Search</button>
+                </div>
             </form>
         </div>
         <div class="topnav-right">

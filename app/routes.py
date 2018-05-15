@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request, url_for, abort, flash, send_from_directory
+from flask import Flask, make_response, render_template, redirect, request, url_for, abort, flash, send_from_directory
 from flask import Markup as fm
 from app import app
 from app import models as mdl
@@ -8,10 +8,15 @@ from app import database as db
 from werkzeug.utils import secure_filename
 import flask_login as fl
 import os
+from app.stellar_block import Stellar_block
+from app.asset import *
+
+import sys
+sys.path.append('./app')
+
 
 # Specify login view for login manager
 lm.lm.login_view = 'signin'
-
 
 # Homepage
 # This is the main page of the website. From here users can search for videos,
@@ -61,11 +66,16 @@ def signup():
         lname = signupform.last_name.data
         email = signupform.email.data
         password = signupform.password.data
+        # NOTE: Blockchain user creation
+        user_on_blockchain = Stellar_block()
+        user_on_blockchain.create_account()
+        passphrase = user_on_blockchain.get_passphrase()
+        balance = float(user_on_blockchain._get_balance())
 
         if db.sql_doesUserExist(email):
             flash("Email already in use")
         else:
-            if not db.sql_addUser(email, password, fname, lname):
+            if not db.sql_addUser(email, password, fname, lname, passphrase, balance):
                 user = lm.User(str(db.sql_doesUserExist(email)))
                 fl.login_user(user)
                 flash('User successful created and logged in')
@@ -77,19 +87,32 @@ def signup():
 
 @app.route('/watch/<int:video_id>', methods=['get', 'post'])
 def watch_video(video_id):
+ 
+    user_passphrase = db.sql_getAllUserInfo(fl.current_user.id)[3]
+    user = Stellar_block(user_passphrase)
+    user_purchases = [int(t.split('bought')[1]) for t in user._get_transactions()]
+    videoIsPurchased = True if video_id in user_purchases else False
+
+    if request.method == "POST":
+        if  "confirm_buy" in request.form:
+            buy_content(video_id)
+            return redirect(url_for('watch_video', video_id=video_id))
+
     video = db.sql_getVideo(video_id)
     
     return render_template(
         'view_video.html',
         video_id=video_id,
-        video_name=video[2],
+        video_owner=db.sql_getUser(video[0])[0],
+        video_title=video[2],
         video_desc=video[3],
-        video_path=url_for('static', filename='videos/%s'%video[5]),
-        videoPrice = video[4],
-        videoIsPublic = True if float(video[4]) == 0 else False,
-        videoIsOwned = True if fl.current_user.is_authenticated and 
+        video_path=url_for('static', filename='videos/%s'%video[5]) if videoIsPurchased else "",
+        video_price = video[4],
+        video_thumbnail=url_for('static', filename='images/blockmart_logo.svg'),
+        videoIsPublic=True if float(video[4]) == 0 else False,
+        videoIsOwned=True if fl.current_user.is_authenticated and 
             str(fl.current_user.id) == str(video[0]) else False,
-        videoIsPurchased = False)
+        videoIsPurchased=videoIsPurchased)
 
 @app.route('/logout', methods=['get', 'post'])
 @fl.login_required
@@ -147,40 +170,48 @@ def search():
 @app.route('/mylibrary', methods=['get', 'post'])
 @fl.login_required
 def user_library():
+    user_passphrase = db.sql_getAllUserInfo(fl.current_user.id)[3]
+    user = Stellar_block(user_passphrase)
+
     uploads_v_ids = db.sql_getUserVideos(fl.current_user.id)
     video_uploads = getVideosFromList(uploads_v_ids)
-    purchases_v_ids = [] # Replace with function that returns list of purchased video IDs
+    
+    purchases_v_ids = [int(t.split('bought')[1]) for t in user._get_transactions()] # Replace with function that returns list of purchased video IDs
     video_purchases = getVideosFromList(purchases_v_ids)
     return render_template('user_library.html', video_uploads=video_uploads,
         video_purchases=video_purchases)
 
 
-# Purchase Confirmation page
-#
-# Page loaded into an iframe that prompts the user to confirm their
-# their purchase
-@app.route('/buy/<int:video_id>', methods=['get', 'post'])
-@fl.login_required
+# Helper Functions
+
 def buy_content(video_id):
 
     vid = db.sql_getVideo(video_id)
     vid_owner = db.sql_getUser(vid[0])
 
-    if request.method == "POST":
-        if "confirm_buy" in request.args:
-            # Insert code here to process transaction
-            pass
+    video_price = vid[4]
+    owner_passphrase = db.sql_getAllUserInfo(vid[0])[3]
+    buyer_passphrase = db.sql_getAllUserInfo(
+        fl.current_user.get_id())[3]
+    memo = '{}bought{}'.format(fl.current_user.get_id(), video_id)
 
-        return redirect(url_for("watch_video", video_id=video_id))
+    owner = Stellar_block(owner_passphrase)
+    buyer = Stellar_block(buyer_passphrase)
 
-    return render_template("transaction_page.html",
-        video_thumbnail=url_for('static', filename='images/blockmart_logo.svg'),
-        video_title=vid[2],
-        video_owner=vid_owner[0],
-        video_price=vid[4])
+    result = buyer.transfer(video_price, owner.get_pubkey(), memo)
+    if result == 'SUCCESS':
+        print('Successfully bought video')
+        trusting = trust_asset(owner._generate_keypair(), buyer._generate_keypair(), 'Video{}'.format(str(video_id)))
+        print('Asset trust:{}'.format(trusting))
+        sending_asset = send_asset(owner._generate_keypair(), buyer._generate_keypair(), 'Video{}'.format(str(video_id)))
+        print('Sending asset:{}'.format(sending_asset))
+        db.sql_editUserBalance(vid[0], owner._get_balance())
+        db.sql_editUserBalance(fl.current_user.get_id(), buyer._get_balance())
+        return 1
+    else:
+        print(result)
+        return 0
 
-
-# Helper Functions
 
 # Function: getVideosFromList(v_ids)
 # Takes an array of video IDs and returns a list of videoInfo objects

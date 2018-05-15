@@ -1,3 +1,15 @@
+/*
+ * Fit webpage to contents
+ *
+ */
+html, body {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
 body {
     font-family: sans-serif;
     margin: 0;
@@ -98,6 +110,10 @@ body {
     right: 0;
 }
 
+#topnav-search .nav-element * {
+    margin: 0 4px;
+}
+
 .topnav .topnav-right {
     float: right;
 }
@@ -144,6 +160,7 @@ body {
     color: #eceff1;
     display: block;
     transition: 0.3s;
+    white-space: nowrap;
 }
 
 .container-sidenav a:not(.sidenav-close-button):hover{
@@ -215,15 +232,17 @@ body {
     margin: 4px;
     background-color: #cfb8dc;
     overflow: hidden;
+    text-align: center;
 }
 
-/*
+
 .video-tile a {
-    display: block;
+    display: inline-block;
+    width: inherit;
 }
 
 .video-tile-thumbnail {
-    width: 240px;
+    width: inherit;
     height: 135px;
     margin: auto;
 }
@@ -231,7 +250,6 @@ body {
 .video-tile-title {
     text-decoration: none;
 }
-*/
 
 
 /*
@@ -289,4 +307,105 @@ body {
     border: none;
     border-radius: 16px;
     display: inline-block;
+}
+
+/*
+ * Styles for purchase confirmation prompt
+ *
+ */
+#trans-prompt-wrapper {
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 2;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#trans-prompt {
+    background-color: #FFFFFF;
+    display: block;
+    margin: auto;
+    padding: 0;
+    height: 480px;
+    width: 640px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow: hidden;
+}
+
+#trans-prompt-header {
+    margin: 0;
+    padding: 8px 8px;
+    display: block;
+    width: calc(100% - 16px);
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    text-align: center;
+}
+
+#trans-prompt-footer {
+    margin: 0;
+    padding: 0 8px;
+    display: block;
+    width: calc(100% - 16px);
+    overflow: hidden;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+#tp-video-thumbnail {
+    display: inline-block;
+    width: 256px;
+    height: 192px;
+    border: solid 4px black;
+    margin: auto;
+}
+
+#tp-video-thumbnail img {
+    width: inherit;
+    height: inherit;
+}
+
+#tp-video-owner {
+    display: block;
+    width: 100%;
+}
+
+#tp-video-price {
+    display: block;
+    width: 100%;
+    font-weight: bold;
+}
+
+#trans-prompt-form .tp-button {
+    display: block;
+    float: right;
+    margin: 8px;
+}
+
+#trans-prompt-footer p {
+    text-align: right;
+}
+
+#user-library {
+    display: inline-block;
+    width: 100%;
+}
+
+#user-library-uploads {
+    display: inline-block;
+    width: 100%;
+}
+
+#user-library-purchases {
+    display: inline-block;
+    width: 100%;
 }
