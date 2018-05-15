@@ -75,6 +75,12 @@ class Stellar_block():
 
         return address.balances[0]['balance']
 
+    def _get_balance_all(self):
+        address = Address(address=self._generate_keypair().address().decode())
+        address.get()  # get the updated information
+
+        return address.balances
+
     def _get_data(self):
         address = Address(address=self._generate_keypair().address().decode())
         address.get()  # get the updated information
