@@ -1,0 +1,40 @@
+{% extends "base_nav.html" %}
+{% block title %}Library{% endblock %}
+{% block body %}
+    <div id="main">
+        <div id="user-library">
+            <h1>Library</h1>
+            <div id="user-library-uploads" class="video-tile-container">
+                <h2>Uploads</h2>
+                {% if not video_uploads %}
+                <p>You haven't uploaded any videos yet. Click <a href={{ url_for("upload") }}>here</a> to upload one.</p> 
+                {% else %}
+                {% for video in video_uploads %}
+                <div class="video-tile">
+                    <a href="{{ url_for('watch_video', video_id=video.id) }}">
+                        <img class="video-tile-thumbnail" src="{{ video.thumbnail_location }}"/>
+                        <div class="video-tile-title">{{ video.title }}</div>
+                    </a>
+                </div>
+                {% endfor %}
+                {% endif %}
+            </div>
+            <div id="user-library-purchases" class="video-tile-conatiner">
+                <h2>Purchases</h2>
+                {% if not video_purchases %}
+                <p>You haven't purchased any videos yet. Click <a href={{ url_for("index") }}>here</a> to browse our collection of videos.</p> 
+                {% else %}
+                {% for video in video_purchases %}
+                <div class="video-tile">
+                    <a href="{{ url_for('watch_video', video_id=video.id) }}">
+                        <img class="video-tile-thumbnail" src="{{ video.thumbnail_location }}"/>
+                        <div class="video-tile-title">{{ video.title }}</div>
+                    </a>
+                </div>
+                {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

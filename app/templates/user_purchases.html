@@ -1,0 +1,22 @@
+{% extends "base_nav.html" %}
+{% block title %}Purchase History{% endblock %}
+{% block body %}
+    <div id="main">
+        <div id="purchase-history-content">
+            <h1>Your Purchases</h1>
+            <div id="purchase-history-entries">
+                {% for video in videos %}
+                <a href="{{ url_for('watch_video', video_id=video.id) }}">
+                    <div class="purchase-history-entry-block">
+                        <img class="ph-enty-block-thumbnail" src="{{ video.thumbnail_location }}"/>
+                        <div class="ph-entry-block-title">{{ video.title }}</div>
+                        <div class="ph-entry-block-date">{{ video.purchase_date }}</div>
+                        <div class="ph-entry-block-price">{{ video.price }}</div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

@@ -1,0 +1,18 @@
+{% extends "base_nav.html" %}
+{% block title %}Search{% endblock %}
+{% block body %}
+    <div id="main">
+        <div id="video-tile-container">
+            <h1>Search Results for &quot;{{ search_query }}&quot;</h1>
+            {% for video in videos %}
+            <div class="video-tile">
+                <a href="{{ url_for('watch_video', video_id=video.id) }}">
+                    <img class="video-tile-thumbnail" src="{{ video.thumbnail_location }}"/>
+                    <div class="video-tile-title">{{ video.title }}</div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+

@@ -1,43 +1,47 @@
-{% extends "base_nav.html" %}
-{% block title %}{{ video_name }}{% endblock %}
-{% block body %}
-    <div id="main">
-        <div id="video-content">
-            <div id="video-player">
-                <video controls>
-                    <source src="{{ video_path}}" type="video/mp4">
-                    Your browser does not support HTML5 video.
-                </video>
-            </div>
-        </div>
-        <div class="video-info-container">
-            <div class="video-info">
-                <div class="video-title">
-                    <h2>{{ video_name }}</h2>
-                </div>
-                <div class="video-desc">
-                    <h3>Description</h3>
-                    <p>{{ video_desc }}</p>
-                </div>
-            </div>
-            <div class="video-purchase-info">
-                {% if not videoIsOwned %}
-                <div class="video-purchase-price">
-                    {% if videoPrice == 0 %}
-                    Free
-                    {% elif videoIsPurchased %}
-                    Purchased
-                    {% else %}
-                    {{ videoPrice }}
-                    {% endif %}
-                </div>
-                {% endif %}
-                {% if videoPrice == 0 or videoIsPublic or videoIsPurchased or videoIsOwned%}
-                <a href="javascript:void(0)">Download</a>
-                {% else %}
-                <a href="javascript:void(0)">Buy Now</a>
-                {% endif %}
-            </div>
+{% extends "base_nav.html" %} {% block title %}{{ video_name }}{% endblock %} {% block body %}
+<div id="main">
+    <div id="video-content">
+        <div id="video-player">
+            <video controls>
+                <source src="{{ video_path }}" type="video/mp4"> Your browser does not support HTML5 video.
+            </video>
         </div>
     </div>
+    <div class="video-info-container">
+        <div class="video-info">
+            <div class="video-title">
+                <h2>{{ video_name }}</h2>
+            </div>
+            <div class="video-desc">
+                <h3>Description</h3>
+                <p>{{ video_desc }}</p>
+            </div>
+        </div>
+        <div class="video-purchase-info">
+            {% if not videoIsOwned %}
+            <div class="video-purchase-price">
+                {% if videoPrice == 0 %} Free {% elif videoIsPurchased %} Purchased {% else %} {{ videoPrice }} {% endif %}
+            </div>
+            {% endif %} {% if videoPrice == 0 or videoIsPublic or videoIsPurchased or videoIsOwned %}
+            <a href="{{ url_for('download', video_id=video_id) }}">Download</a>
+            {% else %}
+            <a href="{{ url_for('buy_content', video_id=video_id) }}" onclick="openBuyPrompt()">Buy Now</a>
+            <!-- NOTE: I am temporarily disabling the script to make this work -->
+            <!-- <script>
+                    function openBuyPrompt() {
+                        var ifrm = document.createElement("iframe");
+                        ifrm.setAttribute("src", "{{ url_for('buy_content', video_id=video_id) }}");
+                        ifrm.style.width = "640px";
+                        ifrm.style.height = "480px";
+                        document.body.appendChild(ifrm);
+                    }
+                    function closeBuyPrompt() {
+                        var ifrm = document.getElementById("trans-prompt-frame");
+                        ifrm.parentNode.removeChild(ifrm);
+                    }
+                </script> -->
+            {% endif %}
+        </div>
+    </div>
+</div>
 {% endblock %}

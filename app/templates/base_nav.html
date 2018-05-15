@@ -1,45 +1,48 @@
 {% extends "base.html" %}
 {% block topnav %}
-    <ul class="container-topnav">
-        <li id="topnav-menu">
+    <div class="topnav">
+        <div id="topnav-menu" class="nav-element">
             <a href="javascript:void(0)" onclick="openSideNav()">
                 <img src="{{ url_for('static', filename='images/topbar_menu_icon.svg') }}"/>
             </a>
-        </li>
-        <li id="topnav-logo">
+        </div>
+        <div id="topnav-logo" class="nav-element">
             <a href="{{ url_for('index') }}">
                 <img src="{{ url_for('static', filename='images/blockmart_logo.svg') }}"/>
             </a>
-        </li>
-        <li>
-            <div id="topnav-search"></div>
-        </li>
+        </div>
+        <div id="topnav-search" class="nav-element">
+            <form action="{{ url_for('search') }}" name="search-form">
+                <input name="search_query" id="search-box" type="text" placeholder="Search" value="{{ search_query }}"/>
+                <button id="search-button">Search</button>
+            </form>
+        </div>
         <div class="topnav-right">
             {% if current_user.is_authenticated %}
-            <li id="topnav-right-user">
-                <span>Hello, {{ current_user.get_username() }}</span>
-            </li>
-            <li>
+            <div id="topnav-right-user" class="nav-element">
+                <span>Hello, {{ current_user.fname }}</span>
+            </div>
+            <div class="nav-element">
                 <a href="{{ url_for('logout') }}">Logout</a>
-            </li>
+            </div>
             {% else %}
-            <li>
+            <div class="nav-element">
                 <a href="{{ url_for('signin') }}">Sign In</a>
-            </li>
+            </div>
             {% endif %}
         </div>
-    </ul>
+    </div>
 {% endblock %}
 {% block sidenav %}
     <div id="sidenav" class="container-sidenav">
         <a href="javascript:void(0)" class="sidenav-close-button" onclick="closeSideNav()">x</a>
         <a href="{{ url_for('index') }}">Home</a>
-        {% if current_user.is_authenicated %}
-        <a href="javascript:void(0)">Upload</a>
-        <a href="javascript:void(0)">My Videos</a>
-        <a href="javascript:void(0)">Purchases</a>
+        {% if current_user.is_authenticated %}
+        <a href="javascript:void(0)">My Profile</a>
+        <a href="{{ url_for('upload') }}">Upload Video</a>
+        <a href="{{ url_for('user_library') }}">Library</a>
         {% endif %}
-        <a href="javascript:void(0)">Help</a>
+        {# <a href="javascript:void(0)">Help</a> #}
     </div>
     <script>
         function openSideNav() {

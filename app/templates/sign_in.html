@@ -6,7 +6,7 @@
         <div id="login-form">
             <form action="" method="POST" name="signin">
                 {{ form.hidden_tag() }}
-                {{ form.username(class="input-field-full-width", placeholder="Email address") }}
+                {{ form.email(class="input-field-full-width", placeholder="Email address") }}
                 {{ form.password(class="input-field-full-width", placeholder="Password") }}
                 {{ form.remember_me() }}
                 <label for="remember_me">Remember me?</label>
