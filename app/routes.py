@@ -9,6 +9,7 @@ from werkzeug.utils import secure_filename
 import flask_login as fl
 import os
 from app.stellar_block import Stellar_block
+from app.asset import *
 
 import sys
 sys.path.append('./app')
@@ -198,6 +199,12 @@ def buy_content(video_id):
             result = buyer.transfer(video_price, owner.get_pubkey(), memo)
             if result == 'SUCCESS':
                 print('Successfully bought video')
+                trusting = trust_asset(owner._generate_keypair(
+                ), buyer._generate_keypair(), 'Video{}'.format(str(video_id)))
+                print('Asset trust:{}'.format(trusting))
+                sending_asset = send_asset(owner._generate_keypair(
+                ), buyer._generate_keypair(), 'Video{}'.format(str(video_id)))
+                print('Sending asset:{}'.format(sending_asset))
             else:
                 print(result)
 
