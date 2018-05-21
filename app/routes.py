@@ -90,7 +90,7 @@ def watch_video(video_id):
  
     user_passphrase = db.sql_getAllUserInfo(fl.current_user.id)[3]
     user = Stellar_block(user_passphrase)
-    user_purchases = [int(t.split('bought')[1]) for t in user._get_transactions()]
+    user_purchases = [int(t.split('bought')[1]) for t in user._get_transactions()] if user._get_transactions() else []
     videoIsPurchased = True if video_id in user_purchases else False
 
     if request.method == "POST":
@@ -175,8 +175,16 @@ def user_library():
 
     uploads_v_ids = db.sql_getUserVideos(fl.current_user.id)
     video_uploads = getVideosFromList(uploads_v_ids)
-    
-    purchases_v_ids = [int(t.split('bought')[1]) for t in user._get_transactions()] # Replace with function that returns list of purchased video IDs
+
+    purchases_v_ids = []    
+
+    ut = user._get_transactions()
+    print(ut)
+    if ut:
+        for t in user._get_transactions():
+            trans = int(t.split('bought')[1])
+            if not trans in uploads_v_ids:
+                purchases_v_ids += [trans]
     video_purchases = getVideosFromList(purchases_v_ids)
     return render_template('user_library.html', video_uploads=video_uploads,
         video_purchases=video_purchases)
