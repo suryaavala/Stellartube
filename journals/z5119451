@@ -1,10 +1,12 @@
 week 2
+Yunhe Gao
 Meeting Topic: Identify our team's project direction
 This meeting reaches agreement on the following issues:
 1. Identify our project direction
 2. Research on decentralized application and prepare for our proposal
 
 week 3
+Yunhe Gao
 Meeting Topic: Assignment mission for each member
 This meeting reaches agreement on the following issues:
 1. We combin our research result together and discuss the stracture of proposal
@@ -13,6 +15,7 @@ This meeting reaches agreement on the following issues:
 4. Natesh will combin every part together.
 
 week 4
+Yunhe Gao
 Meeting Topic: Identify the responsibility for each member
 This meeting reaches agreement on the following issues:
 1. The structure of the decentralize application, which is the database and blockchian will exchange information through websit. Websit extract information from database and show them on these web pages. Then send users’ uni-address and the price of goods to the blockchain for transaction.
@@ -21,12 +24,14 @@ This meeting reaches agreement on the following issues:
 4. Yunhe should develop a database for this project which have to support the information for digital currency transaction.
 
 week 5
+Yunhe Gao
 Meeting Topic: Tracking the processing of each part
 This meeting reaches agreement on the following issues:
 1. The structure of database has been identified and on processing. All tables and libs associated with databse should be finished and tested.
 2. The websit has been initialized and many sample function has been estibalished. 
 
 week 6
+Yunhe Gao
 Meeting Topic: Integrate all part so far and show the 1st stage demo. 
 This meeting reaches agreement ont the following issues:
 1. Libs of database should be refine to more friendly for websit to use. 
@@ -34,12 +39,14 @@ This meeting reaches agreement ont the following issues:
 3. Blockchain part still on going 
 
 week 7
+Yunhe Gao
 Meeting Topic: Tracking the processing of each part.
 This meeting reaches agreement on the follow issues:
 1. Libs of database has been refined and can be easily used by call the API without connect to database by user.
 2. More function has been added into database lib which made it more convinence to collect data.
 
 week 8
+Yunhe Gao
 Meeting Topic: Integrate all part so far and show the 2nd stage demo.
 This meeting reaches agreement on the following issues:
 1. The function that have been achieved so far should be show as a demo.
@@ -47,6 +54,7 @@ This meeting reaches agreement on the following issues:
 3. Blockchain lib is on processing and many sample functions have been finished.
 
 week 9
+Yunhe Gao
 Meeting Topic: Provide more idea on project
 This meeting reach agreement on the following issues:
 1. The database and related function should be modified and edited more friendly.
@@ -54,6 +62,7 @@ This meeting reach agreement on the following issues:
 3. Blockchain part should be merge with websit and complete transaction
 
 week 10
+Yunhe Gao
 Meeting Topic: Integrate all part so far and show the 3th stage demo
 This meeting reaches agreement on the following issues:
 1. New tables of database have been formed and new funtions in the lib werefinished.
