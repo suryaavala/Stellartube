@@ -3,3 +3,4 @@ __pycache__
 *.py[cod]
 app/static/videos/*
 app/uploads/
+app/static/js/*
