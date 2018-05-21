@@ -86,14 +86,18 @@ class Stellar_block():
         address.get()  # get the updated information
         return address.data
 
-    def _get_transactions(self):
+    def _get_transactions(self, time=True):
         address = Address(address=self._generate_keypair().address().decode())
         address.get()  # get the updated information
         transactions = address.transactions()
         if len(transactions['_embedded']['records']) < 2:
             return None
-        trx = [record['memo'] for record in transactions['_embedded']
-               ['records'] if record['memo_type'] == 'text']
+        if time:
+            trx = [(record['created_at'], record['memo'])
+                   for record in transactions['_embedded']['records'] if record['memo_type'] == 'text']
+        else:
+            trx = [record['memo'] for record in transactions['_embedded']
+                   ['records'] if record['memo_type'] == 'text']
         return trx
 
     def _string_lenght_bytes(self, s):
