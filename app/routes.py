@@ -163,29 +163,29 @@ def search():
 
 @app.route('/statistic', methods=['get', "POST"])
 def statistic():
-	data = []
+	date = {}
+	labels = []
+	values = []
 	a = 0
-	if request.method == "GET":
-		for userid in db.sql_getAllUserID():
-			user_passphare = db.sql_getAllUserInfo(userid[0])[3]
-			user = Stellar_block(user_passphare)
- 			data = data + user._get_transactions()
-		labels = ['M','T','W','h']
-	
-		values = [len(data),9,9,9]
+	for userid in db.sql_getAllUserID():
+		user_passphare = db.sql_getAllUserInfo(userid[0])[3]
+		user = Stellar_block(user_passphare)
+ 		for time in user._get_transactions():
+			d = str(time[0].split('T')[0])
+			if not date.has_key(d):
+				date[d] = 1
+			else:
+				date[d] += 1
+	items = date.items()
+	items.sort()
+	print(items)
+	for label, value in items:
+		labels.append(label)
+		values.append(value)
+	if request.method =="GET":
 		return render_template('statistic.html', labels=labels, values=values)
-	elif request.method == "POST":
-		data = []
-		for userid in db.sql_getAllUserID():
-			
-			user_passphare = db.sql_getAllUserInfo(userid[0])[3]
-			user = Stellar_block(user_passphare)
- 			data = data + user._get_transactions()
-			print("transactions: %d" %len(data))
-		labels = ['M','T','W','h']
-	
-		values = [len(data),9,9,9]
-		return jsonify(values = values)
+	else:
+		return jsonify(labels=labels, values = values)
 
 @app.route('/mylibrary', methods=['get', 'post'])
 @fl.login_required
@@ -220,13 +220,11 @@ def buy_content(video_id):
 	        owner = Stellar_block(owner_passphrase)
 	        buyer = Stellar_block(buyer_passphrase)
 
-<<<<<<< HEAD
 	        result = buyer.transfer(video_price, owner.get_pubkey(), memo)
 	        if result == 'SUCCESS':
 	            print('Successfully bought video')
 	        else:
 	            print(result)
-=======
             result = buyer.transfer(video_price, owner.get_pubkey(), memo)
             if result == 'SUCCESS':
                 print('Successfully bought video')
@@ -238,7 +236,6 @@ def buy_content(video_id):
                 print('Sending asset:{}'.format(sending_asset))
             else:
                 print(result)
->>>>>>> 64f588de7284c7fd18af1da5b9665eff8f7be92a
 
 	        db.sql_editUserBalance(vid[0], owner._get_balance())
 	        db.sql_editUserBalance(
