@@ -1,0 +1,59 @@
+{% extends "base_nav.html" %}
+{% block title %}Statistic{% endblock %}
+{% block body %}	
+	<script src="./static/echarts.min.js"></script>
+	<script src="http://cdn.static.runoob.com/libs/jquery/1.10.2/jquery.min.js"></script>
+	<div id="total"></div>
+	<div id="main" style="width: 600px;height:400px;left:400px" align="center">
+		<script type="text/javascript">
+			var myChar = echarts.init(document.getElementById('main'));
+			var js_labels = {{labels|safe}};
+			var js_values = {{values|safe}};
+			var option = {
+				title: {
+					text: 'Transaction Statistic'
+				},
+				tooltip: {},
+				legend:{
+					data:['sale']
+				},
+				xAxis: {
+						data: js_labels 
+				},
+					
+				yAxis: {},
+				series:[{
+					name: 'sale',
+					type: 'line',
+					areaStyle:{
+						type: 'default',
+						color: 'rgba(255, 208, 192, 0.8)'
+					},
+					markPoint:{
+						data: [{
+							type: 'max', name: 'Max',
+							type: 'min', name: 'Min'
+							}]
+					},
+					data: js_values
+				}]
+	
+			};
+		
+			myChar.setOption(option);
+
+			var test = function (data) {
+				myChar.setOption({
+					series: [{
+						name: 'sale',
+						data: data.values 
+					}]
+				});
+			}
+
+			var timeTicket = setInterval(function(){
+				$.post('/statistic', {name : 'test'}, test);
+			}, 4000);
+		</script>
+	</div>
+{% endblock %}

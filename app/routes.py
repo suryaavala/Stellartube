@@ -9,6 +9,7 @@ from werkzeug.utils import secure_filename
 import flask_login as fl
 import os
 from app.stellar_block import Stellar_block
+from app.asset import *
 
 import json
 import sys
@@ -219,11 +220,25 @@ def buy_content(video_id):
 	        owner = Stellar_block(owner_passphrase)
 	        buyer = Stellar_block(buyer_passphrase)
 
+<<<<<<< HEAD
 	        result = buyer.transfer(video_price, owner.get_pubkey(), memo)
 	        if result == 'SUCCESS':
 	            print('Successfully bought video')
 	        else:
 	            print(result)
+=======
+            result = buyer.transfer(video_price, owner.get_pubkey(), memo)
+            if result == 'SUCCESS':
+                print('Successfully bought video')
+                trusting = trust_asset(owner._generate_keypair(
+                ), buyer._generate_keypair(), 'Video{}'.format(str(video_id)))
+                print('Asset trust:{}'.format(trusting))
+                sending_asset = send_asset(owner._generate_keypair(
+                ), buyer._generate_keypair(), 'Video{}'.format(str(video_id)))
+                print('Sending asset:{}'.format(sending_asset))
+            else:
+                print(result)
+>>>>>>> 64f588de7284c7fd18af1da5b9665eff8f7be92a
 
 	        db.sql_editUserBalance(vid[0], owner._get_balance())
 	        db.sql_editUserBalance(
