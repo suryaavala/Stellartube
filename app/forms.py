@@ -31,7 +31,10 @@ class SignUpForm(FlaskForm):
         'password', 
         validators=[wtf.validators.DataRequired()]
     )
-    confirm_password = wtf.PasswordField('confirm password')
+    confirm_password = wtf.PasswordField(
+        'confirm password',
+        validators=[wtf.validators.DataRequired()]
+    )
     submit = wtf.SubmitField('submit')
 
 class UploadVideoForm(FlaskForm):
