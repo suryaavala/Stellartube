@@ -92,12 +92,14 @@ class Stellar_block():
         transactions = address.transactions()
         if len(transactions['_embedded']['records']) < 2:
             return None
+
         if time:
             trx = [(record['created_at'], record['memo'])
                    for record in transactions['_embedded']['records'] if record['memo_type'] == 'text']
         else:
             trx = [record['memo'] for record in transactions['_embedded']
                    ['records'] if record['memo_type'] == 'text']
+
         return trx
 
     def _string_lenght_bytes(self, s):

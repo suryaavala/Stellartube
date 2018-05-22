@@ -5,7 +5,7 @@ import datetime
 db_hostname = 'localhost'
 db_username = 'admin'
 db_passwords = 'password'
-db_dbName = 'DB_DApp2'
+db_dbName = 'DB_DApp4'
 
 # Function used to connect to DB
 # Parameters:
