@@ -9,6 +9,9 @@ class User(fl.UserMixin):
         self.id = userid
         self.email, self.fname, self.lname = db.sql_getUser(userid)
 
+    def get(userid):
+        return User(userid) if db.sql_getUser(userid) else None
+
 
 # Initialise login session manager
 lm = fl.LoginManager()
@@ -16,4 +19,4 @@ lm.init_app(app)
 
 @lm.user_loader
 def load_user(userid):
-    return User(userid)
+    return User.get(userid)
