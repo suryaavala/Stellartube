@@ -1,17 +1,59 @@
 {% extends "base.html" %}
 {% block title %}Create An Account{% endblock %}
 {% block body %}
-    <div class="container">
+    <div class="form-wrapper width-344">
         <h1>Sign Up</h1>
         <div id="sign-up-form">
             <form action="" method="POST" name="signup">
                 {{ form.hidden_tag() }}
-                {{ form.first_name(class="input-field-full-width", placeholder="First Name") }}
-                {{ form.last_name(class="input-field-full-width", placeholder="Last Name") }}
-                {{ form.email(class="input-field-full-width", placeholder="Email") }}
-                {{ form.password(class="input-field-full-width", placeholder="Password") }}
-                {{ form.confirm_password(class="input-field-full-width", placeholder="Confirm Password") }}
-                {{ form.submit(value="Create account") }}
+                <div class="form-field-group">
+                    <div class="form-input width-330">
+                        {{ form.first_name(class="input-field-full-width", placeholder="First Name") }}
+                    </div>
+                    <div>*</div>
+                </div>
+                <div class="form-field-group"> 
+                    <div class="form-input width-330">
+                        {{ form.last_name(class="input-field-full-width", placeholder="Last Name") }}
+                    </div>
+                    <div>*</div>
+                </div>
+                <div class="form-field-group"> 
+                    <div class="form-input width-330">
+                        {{ form.email(class="input-field-full-width", placeholder="Email") }}
+                    </div>
+                    <div>*</div>
+                    {% if error_uae %}
+                    <div class="form-error">Email already in use</div>
+                    {% endif %}
+                </div>
+                <div class="form-field-group"> 
+                    <div class="form-input width-330">
+                        {{ form.password(class="input-field-full-width", placeholder="Password") }}
+                    </div>
+                    <div>*</div>
+                    {% if error_pnv %}
+                    <div class="form-error">Password must be 8-32 characters long</div> 
+                    {% endif %}
+                </div>
+                <div class="form-field-group"> 
+                    <div class="form-input width-330">
+                        {{ form.confirm_password(class="input-field-full-width", placeholder="Confirm Password") }}
+                    </div>
+                    <div>*</div>
+                    {% if error_pdm %}
+                    <div class="form_error">Passwords must match</div>
+                    {% endif %}
+                </div>
+                <div class="form-text smaller-text">* required fields</div>
+                {% if error_fne %}
+                <div class="form-error">Please fill in all the required fields *</div>
+                {% endif %}
+                <div class="form-field-group">
+                    <div class="form-input-button">
+                        {{ form.submit(value="Create account") }}
+                    </div>
+                </div>
             </form>
         </div>
     </div>

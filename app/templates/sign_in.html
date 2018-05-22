@@ -1,17 +1,35 @@
 {% extends "base.html" %}
 {% block title %}Sign In{% endblock %}
 {% block body %}
-    <div class="container">
+    <div class="form-wrapper width-344">
         <h1>Sign In</h1>
         <div id="login-form">
             <form action="" method="POST" name="signin">
                 {{ form.hidden_tag() }}
-                {{ form.email(class="input-field-full-width", placeholder="Email address") }}
-                {{ form.password(class="input-field-full-width", placeholder="Password") }}
-                {{ form.remember_me() }}
-                <label for="remember_me">Remember me?</label>
-                <a href="{{ url_for('index') }}">Forgot password?</a><br><br>
-                {{ form.submit(id="submit", value="Sign In")}}
+                <div class="form-field-group">
+                    <div class="form-input width-344">
+                        {{ form.email(class="input-field-full-width", placeholder="Email address") }}
+                    </div>
+                </div>
+                <div class="form-field-group">
+                    <div class="form-input width-344">
+                        {{ form.password(class="input-field-full-width", placeholder="Password") }}
+                    </div>
+                </div>
+                {% if error_unf %}
+                <div class="form-error">User account not found</div>
+                {% endif %}
+                <div class="form-field-group width-344">
+                    <div>Remember me?</div>
+                    <div class="form-input-checkbox">
+                        {{ form.remember_me() }}
+                    </div>
+                </div>
+                <div class="form-field-group width-344">
+                    <div class="form-input-button">
+                        {{ form.submit(id="submit", value="Sign In")}}
+                    </div>
+                </div>
             </form>
         </div>
         <p>New to Blockheads? <a href="{{ url_for('signup') }}">Create an account</a></p>
