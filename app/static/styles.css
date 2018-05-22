@@ -15,20 +15,16 @@ body {
     margin: 0;
 }
 
-#main {
+.width-330 {
+    width: 330px;
+}
+
+.width-344 {
+    width: 344px;
+}
+
+#content_wrapper {
     transition: 0.5s;
-}
-
-.container {
-    height: 100%;
-    width:  344px;
-    margin: auto;
-}
-
-
-.input-field-full-width {
-    width:  100%;
-    margin: 5px 0px;
 }
 
 .container #remember_me {
@@ -44,6 +40,31 @@ body {
     border-radius: 16px;
     font-weight: 700;
     font-color: #fff;
+}
+
+
+/*
+ * Form styles
+ *
+ */
+
+.form-wrapper {
+    display: block;
+    margin: 32px auto;
+}
+
+.form-field-group {
+    width: 100%;
+    display: inline-block;
+}
+
+.form-field-group div {
+    display: inline-block;
+}
+
+.input-field-full-width {
+    width: 100%;
+    margin: 5px 0px;
 }
 
 
