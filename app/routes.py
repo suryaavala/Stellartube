@@ -32,11 +32,12 @@ def index():
 # Sign In Page
 # Page allows users to sign into their account if they have one, or go to the
 # sign up page, and request their password if they have forgetten it
-
-
 @app.route('/signin', methods=['get', 'post'])
 def signin():
     signinform = frm.SignInForm()
+
+    # Errors
+    error_unf = False # Error: User not found
 
     # Check sign in attempt
     if signinform.validate_on_submit():
@@ -45,8 +46,7 @@ def signin():
         uid = db.sql_doesUserExist(email)
 
         if not uid:
-            print("Error")
-            flash('Wrong credentials')
+            error_unf = True
         else:
             if db.sql_checkUserPassword(uid, password):
                 user = lm.User(str(uid))
@@ -57,44 +57,64 @@ def signin():
 
                 return redirect(next or url_for('index'))
 
-    return render_template('sign_in.html', form=signinform)
+    return render_template('sign_in.html', form=signinform, error_unf=error_unf)
 
 
 @app.route('/signup', methods=['get', 'post'])
 def signup():
     signupform = frm.SignUpForm()
 
+    # Errors
+    error_uae = False # Error: User already exists
+    error_pnv = False # Error: Password not valid
+    error_pdm = False # Error: Passwords dont match
+
     if signupform.validate_on_submit():
         fname = signupform.first_name.data
         lname = signupform.last_name.data
         email = signupform.email.data
         password = signupform.password.data
-        # NOTE: Blockchain user creation
-        user_on_blockchain = Stellar_block()
-        user_on_blockchain.create_account()
-        passphrase = user_on_blockchain.get_passphrase()
-        balance = float(user_on_blockchain._get_balance())
+        cpassword = signupform.confirm_password.data
 
+        # Validate data
         if db.sql_doesUserExist(email):
-            flash("Email already in use")
-        else:
+            error_uae = True
+        if not validPassword(password):
+            error_pnv = True
+        if not cpassword == password:
+            error_pdm = True
+        
+        if not (error_uae or error_pnv or error_pdm):
+            # Blockchain user creation
+            user_on_blockchain = Stellar_block()
+            user_on_blockchain.create_account()
+            passphrase = user_on_blockchain.get_passphrase()
+            balance = float(user_on_blockchain._get_balance())
+            
+            # Add user to database
             if not db.sql_addUser(email, password, fname, lname, passphrase, balance):
                 user = lm.User(str(db.sql_doesUserExist(email)))
                 fl.login_user(user)
-                flash('User successful created and logged in')
-
                 next = request.args.get('next')
                 return redirect(next or url_for('index'))
 
-    return render_template('sign_up.html', form=signupform)
+    return render_template('sign_up.html', form=signupform,
+        error_uae=error_uae, error_pnv=error_pnv, error_pdm=error_pdm)
 
 @app.route('/watch/<int:video_id>', methods=['get', 'post'])
 def watch_video(video_id):
  
-    user_passphrase = db.sql_getAllUserInfo(fl.current_user.id)[3]
-    user = Stellar_block(user_passphrase)
-    user_purchases = [int(t[1].split('bought')[1]) for t in user._get_transactions()] if user._get_transactions() else []
-    videoIsPurchased = True if video_id in user_purchases else False
+    user_purchases = []
+    videoIsPurchased = False
+
+    if fl.current_user.is_authenticated:
+        user_passphrase = db.sql_getAllUserInfo(fl.current_user.id)[3]
+        user = Stellar_block(user_passphrase)
+
+        if user._get_transactions():
+            user_purchases = [int(t[1].split('bought')[1]) for t in user._get_transactions()]
+            if video_id in user_purchases:
+                videoIsPurchased = True
 
     if request.method == "POST":
         if  "confirm_buy" in request.form:
@@ -221,6 +241,9 @@ def user_library():
 
 
 # Helper Functions
+
+def validPassword(pw):
+    return True if len(pw) > 7 and len(pw) < 33 else False
 
 def buy_content(video_id):
     vid = db.sql_getVideo(video_id)
