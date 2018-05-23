@@ -18,6 +18,7 @@ sys.path.append('./app')
 # Specify login view for login manager
 lm.lm.login_view = 'signin'
 
+
 # Homepage
 # This is the main page of the website. From here users can search for videos,
 # login and logout of their account, link to their purchases and uploads, link
@@ -29,11 +30,15 @@ def index():
 
     return render_template('index.html', videos=videos)
 
+
 # Sign In Page
-# Page allows users to sign into their account if they have one, or go to the
-# sign up page, and request their password if they have forgetten it
+# Page allows users to sign into their account
 @app.route('/signin', methods=['get', 'post'])
 def signin():
+    # Redirect to index page if user already logged in
+    if fl.current_user.is_authenticated:
+        return redirect(url_for('index'))
+
     signinform = frm.SignInForm()
 
     # Errors
@@ -60,8 +65,14 @@ def signin():
     return render_template('sign_in.html', form=signinform, error_unf=error_unf)
 
 
+# Sign Up Page
+# Page allows users to create an account
 @app.route('/signup', methods=['get', 'post'])
 def signup():
+    # Redirect to index page if user already logged in
+    if fl.current_user.is_authenticated:
+        return redirect(url_for('index'))
+
     signupform = frm.SignUpForm()
 
     # Errors
@@ -101,6 +112,11 @@ def signup():
     return render_template('sign_up.html', form=signupform,
         error_uae=error_uae, error_pnv=error_pnv, error_pdm=error_pdm)
 
+
+# Video Page
+# Page for relevent video. Allows playback and download of video if the current
+# user owns or purchased it, or the video is free. Links to purchase page if
+# not owned and not purchased to current user
 @app.route('/watch/<int:video_id>', methods=['get', 'post'])
 def watch_video(video_id):
  
@@ -137,6 +153,9 @@ def watch_video(video_id):
             str(fl.current_user.id) == str(video[0]) else False,
         videoIsPurchased=videoIsPurchased)
 
+
+# Logout Page
+# Logs user out of account then redirects to index page
 @app.route('/logout', methods=['get', 'post'])
 @fl.login_required
 def logout():
@@ -144,11 +163,13 @@ def logout():
     return redirect(url_for('index'))
 
 
+# Video Upload Page
+# Page for uploading videos
 @app.route('/upload', methods=['get', 'post'])
 @fl.login_required
 def upload():
     uploadform = frm.UploadVideoForm()
-	
+
     if uploadform.validate_on_submit():
         vtitle = uploadform.title.data
         vdescription = uploadform.description.data
@@ -159,25 +180,36 @@ def upload():
         vfilepath = os.path.join(app.root_path, 'static/videos', vfilename)
         vfile.save(vfilepath)
         hasUploaded = db.sql_addVideo(int(fl.current_user.id), vtitle, vdescription,vprice, vfilename, vlabels)
-        print("hasuploaded: %s!!" %hasUploaded)
+
         if not hasUploaded:
             return redirect(url_for('index'))
 
     return render_template('upload_video.html', form=uploadform)
 
 
+# Download Page
+# Serves video file to user for download
 @app.route('/download/<int:video_id>', methods=['get', 'post'])
 def download(video_id):
-    video = db.sql_getVideo(video_id)
-    if video:
-        vfilename = video[5]
-        vdir = os.path.join(app.root_path, 'static/videos')
-        return send_from_directory(directory=vdir, filename=vfilename,
-            as_attachment=True)
-    else:
-        return redirect(url_for('index'))
+    # check if page request is from the relevent video page else redirect to
+    # the video page
+    if request.referrer and request.referrer.endswith(
+            url_for('watch_video', video_id=video_id)):
+
+        video = db.sql_getVideo(video_id)
+        if video:
+            vfilename = video[5]
+            vdir = os.path.join(app.root_path, 'static/videos')
+            return send_from_directory(directory=vdir,
+                filename=vfilename, as_attachment=True)
+        else:
+            return redirect(url_for('index'))
+
+    return redirect(url_for('watch_video', video_id=video_id))
 
 
+# Search Page
+# Displays results of search query
 @app.route('/search', methods=['get'])
 def search():
     if request.method == 'GET':
@@ -191,6 +223,8 @@ def search():
 
     return redirect(url_for('index'))
 
+
+# Statistics Page
 @app.route('/statistic', methods=['get', "POST"])
 def statistic():
     date = {}
@@ -217,6 +251,9 @@ def statistic():
     else:
         return jsonify(labels=labels, values = values)
 
+
+# User Library Page
+# Displays content owned and purchased by current user
 @app.route('/mylibrary', methods=['get', 'post'])
 @fl.login_required
 def user_library():
