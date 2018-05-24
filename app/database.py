@@ -1,11 +1,12 @@
 import MySQLdb as mdb
 import time
 import datetime
+from stellar_block import Stellar_block
 
 db_hostname = 'localhost'
-db_username = 'admin'
-db_passwords = 'password'
-db_dbName = 'DB_DApp4'
+db_username = 'root'
+db_passwords = 'Czz15133613611'
+db_dbName = 'DB_DApp'
 
 # Function used to connect to DB
 # Parameters:
@@ -324,7 +325,7 @@ if __name__ == "__main__":
     sql_InitialDB(db_hostname, db_username, db_passwords, db_dbName)
 
     # NOTE: Creating an admin app user for blockchain transaction validation
-    from app.stellar_block import Stellar_block
+    from stellar_block import Stellar_block
 
     def initialise_admin_user():
         fname = 'app'
