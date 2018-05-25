@@ -23,23 +23,8 @@ body {
     width: 344px;
 }
 
-#content_wrapper {
+.content_wrapper {
     transition: 0.5s;
-}
-
-.container #remember_me {
-    width: 12px;
-    height: 12px;
-}
-
-.container #submit {
-    padding: 4px 16px;
-    width: auto;
-    background-color: #1473e6;
-    border: none;
-    border-radius: 16px;
-    font-weight: 700;
-    font-color: #fff;
 }
 
 
@@ -67,6 +52,15 @@ body {
     margin: 5px 0px;
 }
 
+.form-input-button {
+    padding: 4px 16px;
+    width: auto;
+    background-color: #1473e6;
+    border: none;
+    border-radius: 16px;
+    font-weight: 700;
+    font-color: #fff;
+}
 
 /*
  * Top navigation bar css
@@ -209,36 +203,36 @@ body {
  */
 
 @media (min-width: 672px) {
-    #video-tile-container {
+    .video-list-wrapper {
         width: 432px;
     }
 }
 
 @media (min-width: 1000px) {
-    #video-tile-container {
+    .video-list-wrapper {
         width: 648px;
     }
 }
 
 @media (min-width: 1216px) {
-    #video-tile-container {
+    .video-list-wrapper {
         width: 864px;
     }
 }
 
 @media (min-width: 1432px) {
-    #video-tile-container {
+    .video-list-wrapper {
         width: 1080px;
     }
 }
 
 @media (min-width: 1648px) {
-    #video-tile-container {
+    .video-list-wrapper {
         width: 1296px;
     }
 }
 
-#video-tile-container {
+.video-list-wrapper {
     margin: 0 auto;
     overflow: auto;
     min-width: 648px;

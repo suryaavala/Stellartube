@@ -32,8 +32,8 @@
             {% if video_price == 0 or videoIsPublic or videoIsPurchased or videoIsOwned %}
             <a href="{{ url_for('download', video_id=video_id) }}">Download</a>
             {% else %}
-            <a id="vp-buy-now" href="javascript:void(0)" onclick="openBuyPrompt()">Buy Now</a>
-            <div id="trans-prompt-wrapper">
+            <a id="vp-buy-now" href="{{ url_for('buy_content', video_id=video_id) }}">Buy Now</a>
+        <!--    <div id="trans-prompt-wrapper">
                 <div id="trans-prompt">
                     <div id="trans-prompt-header">
                         <div id="tp-video-thumbnail">

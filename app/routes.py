@@ -208,6 +208,66 @@ def download(video_id):
     return redirect(url_for('watch_video', video_id=video_id))
 
 
+# Video Purchase Page
+# Allows users to purchase content
+@app.route('/buy/<int:video_id>', methods=['get', 'post'])
+@fl.login_required
+def buy_content(video_id):
+    # Errors
+    error_insuf = False # Error: Insufficient balance
+    error_trans = False # Error: Error processing transaction
+
+    vid = db.sql_getVideo(video_id)
+
+    if request.method == 'POST':
+        if 'cancel' in request.form:
+            return redirect(url_for('watch_video', video_id=video_id))
+        elif 'confirm' in request.form:
+            vid_owner = db.sql_getUser(vid[0])
+
+            owner_passphrase = db.sql_getAllUserInfo(vid[0])[3]
+            buyer_passphrase = db.sql_getAllUserInfo(
+            fl.current_user.get_id())[3]
+            memo = '{}bought{}'.format(fl.current_user.get_id(), video_id)
+
+            owner = Stellar_block(owner_passphrase)
+            buyer = Stellar_block(buyer_passphrase)
+
+            video_price = vid[4]
+            user_balance = float(buyer._get_balance())
+
+            if video_price <= user_balance:            
+                result = buyer.transfer(video_price, owner.get_pubkey(), memo)
+                if result == 'SUCCESS':
+                    trusting = trust_asset(owner._generate_keypair(), buyer._generate_keypair(), 'Video{}'.format(str(video_id)))
+                    sending_asset = send_asset(owner._generate_keypair(), buyer._generate_keypair(), 'Video{}'.format(str(video_id)))
+                    db.sql_editUserBalance(vid[0], owner._get_balance())
+                    db.sql_editUserBalance(fl.current_user.get_id(), buyer._get_balance())
+
+                    return redirect(url_for('watch_video', video_id=video_id))
+
+                else:
+                    error_trans = True
+            else:
+                error_insuf = True
+    else:
+        # check if page request is from the relevent video page else redirect to
+        # the video page
+        if not (request.referrer and request.referrer.endswith(
+                url_for('watch_video', video_id=video_id))):
+            return redirect(url_for('watch_video', video_id=video_id))
+
+    return render_template('transaction_page.html',
+        video_id=video_id,
+        video_owner=db.sql_getUser(vid[0])[0],
+        video_title=vid[2],
+        video_price = vid[4],
+        video_thumbnail=url_for('static',
+            filename='images/blockmart_logo.svg'),
+        error_insuf=error_insuf,
+        error_trans=error_trans)
+
+
 # Search Page
 # Displays results of search query
 @app.route('/search', methods=['get'])
@@ -281,34 +341,6 @@ def user_library():
 
 def validPassword(pw):
     return True if len(pw) > 7 and len(pw) < 33 else False
-
-def buy_content(video_id):
-    vid = db.sql_getVideo(video_id)
-    vid_owner = db.sql_getUser(vid[0])
-
-    video_price = vid[4]
-    owner_passphrase = db.sql_getAllUserInfo(vid[0])[3]
-    buyer_passphrase = db.sql_getAllUserInfo(
-        fl.current_user.get_id())[3]
-    memo = '{}bought{}'.format(fl.current_user.get_id(), video_id)
-
-    owner = Stellar_block(owner_passphrase)
-    buyer = Stellar_block(buyer_passphrase)
-
-    result = buyer.transfer(video_price, owner.get_pubkey(), memo)
-    if result == 'SUCCESS':
-        print('Successfully bought video')
-        trusting = trust_asset(owner._generate_keypair(), buyer._generate_keypair(), 'Video{}'.format(str(video_id)))
-        print('Asset trust:{}'.format(trusting))
-        sending_asset = send_asset(owner._generate_keypair(), buyer._generate_keypair(), 'Video{}'.format(str(video_id)))
-        print('Sending asset:{}'.format(sending_asset))
-        db.sql_editUserBalance(vid[0], owner._get_balance())
-        db.sql_editUserBalance(fl.current_user.get_id(), buyer._get_balance())
-        return 1
-    else:
-        print(result)
-        return 0
-
 
 # Function: getVideosFromList(v_ids)
 # Takes an array of video IDs and returns a list of videoInfo objects

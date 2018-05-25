@@ -1,25 +1,33 @@
-{% extends "base.html" %}
+{% extends "base_nav.html" %}
 {% block body %}
-    <div id="trans-prompt">
-        <div id="trans-prompt-header">
-            <div id="tp-video-thumnail">
-                <img src="{{ video_thumbnail }}"</img>
+    <div class="content-wrapper">
+        {% if error_insuf %}
+        <div id="tp-error-notification" class="error_notification">
+            <span>Insufficient funds to make purchase</span>
+        </div>
+        {% endif %}
+        {% if error_trans %}
+        <div id="tp-error-notification" class="error_notification">
+            <span>Error processing transaction - Purchase unsuccessful</span>
+        </div>
+        {% endif %}
+        <div id="trans-prompt">
+            <div id="trans-prompt-header">
+                <div id="tp-video-thumnail">
+                    <img src="{{ video_thumbnail }}"</img>
+                </div>
+                <div id="tp-video-title">{{ video_title }}</div>
+                <div id="tp-video-owner">{{ video_owner }}</div>
+                <div id="tp-video-price">{{ video_price }} tks</div>
             </div>
-            <div id="tp-video-title">{{ video_title }}</div>
-            <div id="tp-video-owner">{{ video_owner }}</div>
-            <div id="tp-video-price">{{ video_price }} tks</div>
-        </div>
-        <div id="tp-video-title">{{ video_title }}</div>
-        <div id="tp-video-owner">{{ video_owner }}</div>
-        <div id="tp-video-price">{{ video_price }}</div>
-    </div>
-    <div id="trans-prompt-footer">
-        <div id="trans-prompt-form">
-            <form name="confirm_purchase" action="{{ url_for('buy_content', video_id=video_id) }}" method="POST">
-                <button id="tp-button-cancel" onclick="closeBuyPrompt()">Cancel</button>
-                <button id="tp-button-continue" name="confirm_buy" type="submit">Continue</button>
-            </form>
+            <div id="trans-prompt-footer">
+                <div id="trans-prompt-form">
+                    <form name="confirm_purchase" method="POST">
+                        <button name="cancel" id="tp-button-cancel" type="submit">Cancel</button>
+                        <button name="confirm" id="tp-button-continue" name="confirm_buy" type="submit">Continue</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
-</div>
 {% endblock %}
