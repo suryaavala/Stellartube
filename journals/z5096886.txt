@@ -1,0 +1,46 @@
+Work Diary
+
+Surya Avinash Avala (z5096886)
+
+Week 2:
+- Groups are formed and roles were decided
+- Finalised the project
+- Admin stuff like (slack, trello, bitbucket) were setup
+
+Week 3:
+- Project Architecture was drafted
+- I have started researching into blockchain 
+
+Week 4:
+- Studying blockchain technology and smart contracts
+- Other Decentralised application Architectures were looked at
+
+Week 5:
+- Started doing tutorials on Ethereum blockchain
+- Local and test public networks were explored
+- I did a dummy voting app with local Ethereum setup
+
+Week 6:
+- Switched to Stellar as a blockchain
+- I have written a program to interface with blockchain
+
+Week 7:
+- User Creation/signups on blockchain program
+
+Week 8:
+- Transactions for native asset transfers on blochain 
+
+Week 9:
+- Custom asset Creation on blochain done
+- Smart contracts, multi-signature transactions, escrows on blochain done
+
+Week 10:
+- Integrating blochain module with rest of the application
+
+Week 11:
+- Bug fixes and code optimization
+
+Week 12:
+- Transactions page with transaction times 
+- Worked on other feedback given during demo
+- Report writing
