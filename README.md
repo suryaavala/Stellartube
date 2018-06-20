@@ -1,5 +1,10 @@
 # README
 
+Youtube type media sharing platform on Blockchain
+Stellar's Test Network is used to create new Custom tokens.
+
+NOTE: Front-end is buggy and needs more work. Blockchain module is Stellar! :D
+
 ## Setup
 
 Libraries used:
