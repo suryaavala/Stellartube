@@ -5,7 +5,7 @@ click==6.7
 crc16==0.1.1
 ed25519==1.4
 Flask==0.12.2
-Flask-Cors==3.0.4
+Flask-Cors==3.0.9
 Flask-Login==0.4.1
 Flask-WTF==0.14.2
 idna==2.6
